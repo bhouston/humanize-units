@@ -48,6 +48,58 @@ humanizeUnit(12_345_678, {
 humanizeUnit(65, { units: Time, unitSeparator: ' ' }); // "1.08 m"
 ```
 
+## Built-in Units & Helpers
+
+| Unit table | Description | Helper |
+| --- | --- | --- |
+| `Count` | SI prefixes for general counts | `humanizeCount` |
+| `Bytes` | Decimal byte sizes (kB, MB, …) | `humanizeBytes` |
+| `BytesDecimal` | Alias of `Bytes` | `humanizeBytesDecimal` |
+| `BytesBinary` | Binary byte sizes (KiB, MiB, …) | `humanizeBytesBinary` |
+| `Storage` | Decimal storage sizes | `humanizeStorage` |
+| `StorageBinary` | Binary storage sizes | `humanizeStorageBinary` |
+| `Time` | Seconds to years | `humanizeTime` |
+| `Distance` | SI distances (μm to Mm) | `humanizeDistance` |
+| `Mass` | SI masses (mg to Mg) | `humanizeMass` |
+| `Acceleration` | SI accelerations | `humanizeAcceleration` |
+| `Charge` | SI electric charge | `humanizeCharge` |
+| `Momentum` | SI momentum | `humanizeMomentum` |
+| `Power` | SI power (W) | `humanizePower` |
+| `Velocity` | SI velocity (m/s) | `humanizeVelocity` |
+| `Volume` | SI volume (m³) | `humanizeVolume` |
+| `LiquidVolume` | SI liquid volume (L) | `humanizeLiquidVolume` |
+| `Temperature` | Celsius with SI prefixes | `humanizeTemperature` |
+| `TemperatureKelvin` | Kelvin with SI prefixes | `humanizeTemperatureKelvin` |
+| `Pressure` | SI pressure (Pa) | `humanizePressure` |
+| `Force` | SI force (N) | `humanizeForce` |
+| `Torque` | SI torque (N·m) | `humanizeTorque` |
+| `Energy` | SI energy (J) | `humanizeEnergy` |
+| `Voltage` | SI voltage (V) | `humanizeVoltage` |
+| `Current` | SI current (A) | `humanizeCurrent` |
+| `Resistance` | SI resistance (Ω) | `humanizeResistance` |
+| `Capacitance` | SI capacitance (F) | `humanizeCapacitance` |
+| `Inductance` | SI inductance (H) | `humanizeInductance` |
+| `Frequency` | SI frequency (Hz) | `humanizeFrequency` |
+| `Angle` | SI angle (degrees) | `humanizeAngle` |
+| `Length` | SI length (m) | `humanizeLength` |
+| `Area` | SI area (m²) | `humanizeArea` |
+| `VolumeFlowRate` | SI volumetric flow (m³/s) | `humanizeVolumeFlowRate` |
+| `MassFlowRate` | SI mass flow (kg/s) | `humanizeMassFlowRate` |
+| `Density` | SI density (kg/m³) | `humanizeDensity` |
+| `Concentration` | SI concentration (mol/m³) | `humanizeConcentration` |
+| `MolarMass` | SI molar mass (g/mol) | `humanizeMolarMass` |
+| `MolarVolume` | SI molar volume (m³/mol) | `humanizeMolarVolume` |
+| `MolarDensity` | SI molar density (mol/m³) | `humanizeMolarDensity` |
+| `MolarConcentration` | Alias of `Concentration` | `humanizeMolarConcentration` |
+| `MagneticFlux` | Magnetic flux (weber) | `humanizeMagneticFlux` |
+| `MagneticFluxDensity` | Magnetic flux density (tesla) | `humanizeMagneticFluxDensity` |
+| `Illuminance` | Illuminance (lux) | `humanizeIlluminance` |
+| `LuminousFlux` | Luminous flux (lumen) | `humanizeLuminousFlux` |
+| `Radioactivity` | Radioactivity (becquerel) | `humanizeRadioactivity` |
+| `RadiationDoseEquivalent` | Equivalent dose (sievert) | `humanizeRadiationDoseEquivalent` |
+| `RadiationDoseAbsorbed` | Absorbed dose (gray) | `humanizeRadiationDoseAbsorbed` |
+| `CatalyticActivity` | Catalytic activity (katal) | `humanizeCatalyticActivity` |
+
 ## Development
 
 ```bash

@@ -16,16 +16,24 @@ import {
   Energy,
   Force,
   Frequency,
+  Illuminance,
   Inductance,
   Length,
   LiquidVolume,
+  LuminousFlux,
   Mass,
   MassFlowRate,
+  MagneticFlux,
+  MagneticFluxDensity,
   MolarConcentration,
   MolarDensity,
   MolarMass,
   MolarVolume,
   Momentum,
+  CatalyticActivity,
+  RadiationDoseAbsorbed,
+  RadiationDoseEquivalent,
+  Radioactivity,
   Power,
   Pressure,
   Resistance,
@@ -43,12 +51,12 @@ import {
 } from './units.js';
 
 export type HumanizeHelperOptions = Omit<HumanizeUnitOptions, 'units'>;
-export type HumanizeHelper = (
-  value: number | null | undefined,
-  options?: HumanizeHelperOptions,
-) => string;
+export type HumanizeHelper = (value: number | null | undefined, options?: HumanizeHelperOptions) => string;
 
-const createHumanizeHelper = (units: UnitArray): HumanizeHelper => (value, options) => humanizeUnit(value, { ...options, units });
+const createHumanizeHelper =
+  (units: UnitArray): HumanizeHelper =>
+  (value, options) =>
+    humanizeUnit(value, { ...options, units });
 
 export const humanizeCount = createHumanizeHelper(Count);
 export const humanizeBytes = createHumanizeHelper(Bytes);
@@ -89,4 +97,11 @@ export const humanizeMolarMass = createHumanizeHelper(MolarMass);
 export const humanizeMolarVolume = createHumanizeHelper(MolarVolume);
 export const humanizeMolarDensity = createHumanizeHelper(MolarDensity);
 export const humanizeMolarConcentration = createHumanizeHelper(MolarConcentration);
-
+export const humanizeMagneticFlux = createHumanizeHelper(MagneticFlux);
+export const humanizeMagneticFluxDensity = createHumanizeHelper(MagneticFluxDensity);
+export const humanizeIlluminance = createHumanizeHelper(Illuminance);
+export const humanizeLuminousFlux = createHumanizeHelper(LuminousFlux);
+export const humanizeRadioactivity = createHumanizeHelper(Radioactivity);
+export const humanizeRadiationDoseEquivalent = createHumanizeHelper(RadiationDoseEquivalent);
+export const humanizeRadiationDoseAbsorbed = createHumanizeHelper(RadiationDoseAbsorbed);
+export const humanizeCatalyticActivity = createHumanizeHelper(CatalyticActivity);

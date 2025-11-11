@@ -7,6 +7,9 @@ import {
   humanizeUnit,
   humanizeBytes,
   humanizeCount,
+  humanizeIlluminance,
+  humanizeMagneticFlux,
+  humanizeRadioactivity,
   humanizeTime,
   siUnits,
   type HumanizeHelperOptions,
@@ -190,6 +193,9 @@ describe('helper wrappers', () => {
     expect(humanizeBytes(1_500)).toBe('1.5kB');
     expect(humanizeTime(3_600)).toBe('1h');
     expect(humanizeCount(12_345)).toBe('12.3k');
+    expect(humanizeMagneticFlux(0.005)).toBe('5mWb');
+    expect(humanizeIlluminance(12_000)).toBe('12klx');
+    expect(humanizeRadioactivity(3_200_000)).toBe('3.2MBq');
   });
 
   it('supports helper options typing', () => {
