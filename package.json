@@ -1,8 +1,14 @@
 {
   "name": "humanize-units",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "Efficient TypeScript utilities for converting numeric values to human friendly rounded strings with unit / magnitude prefixes.",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bhouston/humanize-units.git"
+  },
+  "author": "Ben Houston <ben@benhouston3d.com>",
+  "license": "MIT",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -36,8 +42,6 @@
     "humanize",
     "esm"
   ],
-  "author": "",
-  "license": "MIT",
   "sideEffects": false,
   "engines": {
     "node": ">=18"
