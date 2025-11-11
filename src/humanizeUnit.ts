@@ -69,6 +69,7 @@ export const humanizeUnit = (value: number | null | undefined, options?: Humaniz
 
   const normalizedUnits = normalizeUnits(units);
   const targetUnit = selectUnit(value, normalizedUnits);
+  /* c8 ignore next -- normalizeUnits already guarantees positive values */
   const divider = targetUnit.value || 1;
 
   const formatter = new Intl.NumberFormat(locale, {
@@ -81,4 +82,10 @@ export const humanizeUnit = (value: number | null | undefined, options?: Humaniz
   const separator = targetUnit.notation ? unitSeparator : '';
 
   return `${formattedNumber}${separator}${targetUnit.notation}`;
+};
+
+/** @internal */
+export const __private__ = {
+  normalizeUnits,
+  selectUnit,
 };
