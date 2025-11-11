@@ -1,6 +1,6 @@
 # humanize-units
 
-Lightweight TypeScript helpers for turning raw numeric values into human-friendly strings with unit suffixes. Publishable as a modern ESM package.
+Lightweight TypeScript helpers for turning raw numeric values into human-friendly strings with unit suffixes. Optimized for treeshaking with a base footprint of 3 KB (about 1 KB minified). Published as a modern ESM package.
 
 ## Installation
 
@@ -16,17 +16,19 @@ import { BytesDecimal, Count, Time, humanizeUnit, siUnits } from 'humanize-units
 humanizeUnit(42_500); // "42.5k" (defaults to Count units)
 humanizeUnit(8_388_608, { units: BytesDecimal }); // "8.39MB"
 humanizeUnit(86_400, { units: Time }); // "1d"
+```
 
-// Provide your own unit table
-const distanceUnits = [
-  { value: 1_000, notation: 'km' },
-  { value: 1, notation: 'm' },
-];
-humanizeUnit(1_500, { units: distanceUnits, significantDigits: 4 }); // "1.500km"
+### Helper shortcuts
 
-// Generate SI tables on demand
-const voltageUnits = siUnits('V', { minExponent: -3, maxExponent: 6 });
-humanizeUnit(0.0032, { units: voltageUnits }); // "3.2mV"
+Every built-in unit table has a convenience helper that preconfigures `humanizeUnit` for you:
+```ts
+import { humanizeBytes, humanizeTime } from 'humanize-units';
+
+humanizeBytes(1_500); // "1.5 kB"
+humanizeBytes(8_388_608, { useGrouping: true }); // "8.39 MB"
+
+humanizeTime(3_600); // "1h"
+humanizeTime(42, { unitSeparator: ' ' }); // "42 s"
 ```
 
 Fine-tune rounding, grouping, locale, and presentation via options.
@@ -46,6 +48,43 @@ humanizeUnit(12_345_678, {
   significantDigits: 4,
 }); // "12,35M"
 humanizeUnit(65, { units: Time, unitSeparator: ' ' }); // "1.08 m"
+```
+
+## Options
+
+`humanizeUnit(value, options)` accepts a numeric value (or `null` / `undefined`) and an optional configuration object:
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `units` | `UnitArray` | `Count` | Ordered list of unit breakpoints. Provide your own to customize the suffixes and value thresholds. |
+| `significantDigits` | `number` | `3` | Maximum number of significant digits to display. Passed to `Intl.NumberFormat`. |
+| `minimumSignificantDigits` | `number` | `1` | Minimum number of significant digits to display. |
+| `locale` | `string` | `'en-US'` | BCP 47 locale string forwarded to `Intl.NumberFormat`. |
+| `useGrouping` | `boolean` | `false` | Enables digit grouping separators (e.g. `1,000`). |
+| `unitSeparator` | `string` | `''` | Inserted between the formatted value and the unit when the unit has a notation. |
+| `emptyValue` | `string` | `''` | Returned when the input is `null`, `undefined`, or `NaN`. |
+
+Additional behaviour:
+
+- Infinite values (`Infinity`, `-Infinity`) are returned as strings without modification.
+- If no unit in `units` matches the absolute value, the smallest unit in the table is used as a fallback.
+- Helpers like `humanizeBytes` accept the same options (except `units`, which is preconfigured).
+
+## Customize with your Own Units
+
+You can easily create your own unit tables:
+
+```ts
+// Provide your own unit table
+const distanceUnits = [
+  { value: 1_000, notation: 'km' },
+  { value: 1, notation: 'm' },
+];
+humanizeUnit(1_500, { units: distanceUnits, significantDigits: 4 }); // "1.500km"
+
+// Generate SI tables on demand
+const voltageUnits = siUnits('V', { minExponent: -3, maxExponent: 6 });
+humanizeUnit(0.0032, { units: voltageUnits }); // "3.2mV"
 ```
 
 ## Built-in Units & Helpers
