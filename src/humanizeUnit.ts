@@ -113,8 +113,8 @@ export const humanizeUnit = (value: number | null | undefined, options?: Humaniz
     return String(value);
   }
 
-  const targetUnit = selectUnit(value, units);
-  /* c8 ignore next -- normalizeUnits already guarantees positive values */
+  const targetUnit = selectUnit(value === 0 ? 1 : value, units);
+  /* c8 ignore next -- fallback to 1 if value is 0 or falsy */
   const divider = targetUnit.value || 1;
 
   const formatter = new Intl.NumberFormat(locale, {

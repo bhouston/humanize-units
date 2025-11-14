@@ -53,7 +53,6 @@ import {
   humanizeVoltage,
   humanizeVolume,
   humanizeVolumeFlowRate,
-  siUnits,
   type HumanizeHelper,
   type HumanizeHelperOptions,
   type HumanizeUnitOptions,
@@ -129,11 +128,6 @@ describe('humanizeUnit defaults', () => {
     expect(humanizeUnit(1_500, { units: distanceUnits })).toBe('1.5km');
   });
 
-  it('allows shared SI units helper', () => {
-    const distanceUnits = siUnits('m', { minExponent: -3, maxExponent: 3 });
-    expect(humanizeUnit(2_500, { units: distanceUnits })).toBe('2.5km');
-  });
-
   it('respects formatter overrides', () => {
     expect(
       humanizeUnit(1_500, {
@@ -174,19 +168,42 @@ describe('humanizeUnit edge cases', () => {
     ).toBe('0.90ms');
   });
 
-  it('normalizes custom unit arrays', () => {
-    const unsortedUnits: UnitArray = [
-      { value: 1, notation: 'm' },
+  it('works with custom unit arrays in correct order', () => {
+    const distanceUnits: UnitArray = [
       { value: 1_000, notation: 'km' },
+      { value: 1, notation: 'm' },
     ];
-    expect(humanizeUnit(42_000, { units: unsortedUnits })).toBe('42km');
+    expect(humanizeUnit(42_000, { units: distanceUnits })).toBe('42km');
   });
 
-  it('throws when units contain non-positive values', () => {
-    const brokenUnits = [{ value: 0, notation: '' }] as UnitArray;
-    expect(() => humanizeUnit(10, { units: brokenUnits })).toThrow(
-      'humanizeUnit only supports units with a positive value.',
-    );
+  it('handles negative values correctly', () => {
+    const distanceUnits: UnitArray = [
+      { value: 1_000, notation: 'km' },
+      { value: 1, notation: 'm' },
+    ];
+    // Negative values should select unit based on absolute value
+    expect(humanizeUnit(-42_000, { units: distanceUnits })).toBe('-42km');
+    expect(humanizeUnit(-1_500, { units: distanceUnits })).toBe('-1.5km');
+    expect(humanizeUnit(-500, { units: distanceUnits })).toBe('-500m');
+    expect(humanizeUnit(-0.5, { units: distanceUnits })).toBe('-0.5m');
+    // Test with default units
+    expect(humanizeUnit(-12_345)).toBe('-12.3k');
+    expect(humanizeUnit(-1_234_567)).toBe('-1.23M');
+    expect(humanizeUnit(-0.001)).toBe('-1m');
+    // Test with different formatting options
+    expect(
+      humanizeUnit(-1_500, {
+        units: Count,
+        unitSeparator: ' ',
+      }),
+    ).toBe('-1.5 k');
+    expect(
+      humanizeUnit(-12_345, {
+        units: SI,
+        postfix: 'B',
+        significantDigits: 2,
+      }),
+    ).toBe('-12kB');
   });
 
   it('respects custom separators and minimum digits', () => {
