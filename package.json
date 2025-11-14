@@ -1,6 +1,6 @@
 {
   "name": "humanize-units",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Efficient TypeScript utilities for converting numeric values to human friendly rounded strings with unit / magnitude prefixes.",
   "type": "module",
   "repository": {
