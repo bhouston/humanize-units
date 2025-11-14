@@ -62,9 +62,9 @@ import { __private__ } from '../src/humanizeUnit.js';
 
 describe('humanizeUnit with explicit units', () => {
   const testUnits: UnitArray = [
-    { value: 1_000_000, notation: 'M' },
-    { value: 1_000, notation: 'K' },
-    { value: 1, notation: '' },
+    { value: 1_000_000, unit: 'M' },
+    { value: 1_000, unit: 'K' },
+    { value: 1, unit: '' },
   ];
 
   it('returns empty string for undefined', () => {
@@ -81,7 +81,7 @@ describe('humanizeUnit with explicit units', () => {
   });
 
   it('honours grouping and locale', () => {
-    const baseUnits: UnitArray = [{ value: 1, notation: '' }];
+    const baseUnits: UnitArray = [{ value: 1, unit: '' }];
     expect(humanizeUnit(12_345_678, { units: testUnits, useGrouping: true })).toBe('12.3M');
     expect(
       humanizeUnit(12_345, {
@@ -122,8 +122,8 @@ describe('humanizeUnit defaults', () => {
 
   it('accepts custom unit arrays', () => {
     const distanceUnits: UnitArray = [
-      { value: 1_000, notation: 'km' },
-      { value: 1, notation: 'm' },
+      { value: 1_000, unit: 'km' },
+      { value: 1, unit: 'm' },
     ];
     expect(humanizeUnit(1_500, { units: distanceUnits })).toBe('1.5km');
   });
@@ -170,16 +170,16 @@ describe('humanizeUnit edge cases', () => {
 
   it('works with custom unit arrays in correct order', () => {
     const distanceUnits: UnitArray = [
-      { value: 1_000, notation: 'km' },
-      { value: 1, notation: 'm' },
+      { value: 1_000, unit: 'km' },
+      { value: 1, unit: 'm' },
     ];
     expect(humanizeUnit(42_000, { units: distanceUnits })).toBe('42km');
   });
 
   it('handles negative values correctly', () => {
     const distanceUnits: UnitArray = [
-      { value: 1_000, notation: 'km' },
-      { value: 1, notation: 'm' },
+      { value: 1_000, unit: 'km' },
+      { value: 1, unit: 'm' },
     ];
     // Negative values should select unit based on absolute value
     expect(humanizeUnit(-42_000, { units: distanceUnits })).toBe('-42km');

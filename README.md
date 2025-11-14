@@ -11,10 +11,10 @@ pnpm add humanize-units
 ## Usage
 
 ```ts
-import { BytesDecimal, Count, Time, humanizeUnit, siUnits } from 'humanize-units';
+import { Time, humanizeUnit } from 'humanize-units';
 
-humanizeUnit(42_500); // "42.5k" (defaults to Count units)
-humanizeUnit(8_388_608, { units: BytesDecimal }); // "8.39MB"
+humanizeUnit(42_500); // "42.5k" (defaults to SI units)
+humanizeUnit(8_388_608, { postfix: 'B' }); // "8.39MB" (SI is default, so units can be omitted)
 humanizeUnit(86_400, { units: Time }); // "1d"
 ```
 
@@ -34,15 +34,14 @@ humanizeTime(42, { unitSeparator: ' ' }); // "42 s"
 Fine-tune rounding, grouping, locale, and presentation via options.
 
 ```ts
-humanizeUnit(1_048_576, { units: BytesDecimal, significantDigits: 4, useGrouping: true }); // "1.049MB"
+humanizeUnit(1_048_576, { postfix: 'B', significantDigits: 4, useGrouping: true }); // "1.049MB"
 humanizeUnit(1_500, {
-  units: BytesDecimal,
+  postfix: 'B',
   significantDigits: 4,
   minimumSignificantDigits: 4,
   useGrouping: true,
-}); // "1.500KB"
+}); // "1.500kB"
 humanizeUnit(12_345_678, {
-  units: Count,
   locale: 'de-DE',
   useGrouping: true,
   significantDigits: 4,
@@ -56,45 +55,53 @@ humanizeUnit(65, { units: Time, unitSeparator: ' ' }); // "1.08 m"
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `units` | `UnitArray` | `Count` | Ordered list of unit breakpoints. Provide your own to customize the suffixes and value thresholds. |
+| `units` | `UnitArray` | `SI` | Ordered list of unit breakpoints (magnitude prefixes). Provide your own to customize the prefixes and value thresholds. Since `SI` is the default, you can omit this option when using SI prefixes. |
+| `postfix` | `string` | `''` | Text appended after the unit. Useful when using base prefix arrays like `SI` (the default) or `Binary` to separate the prefix from the unit abbreviation (e.g., `'B'` for bytes, `'V'` for volts). |
 | `significantDigits` | `number` | `3` | Maximum number of significant digits to display. Passed to `Intl.NumberFormat`. |
 | `minimumSignificantDigits` | `number` | `1` | Minimum number of significant digits to display. |
 | `locale` | `string` | `'en-US'` | BCP 47 locale string forwarded to `Intl.NumberFormat`. |
 | `useGrouping` | `boolean` | `false` | Enables digit grouping separators (e.g. `1,000`). |
-| `unitSeparator` | `string` | `''` | Inserted between the formatted value and the unit when the unit has a notation. |
+| `unitSeparator` | `string` | `''` | Inserted between the formatted value and the unit. |
 | `emptyValue` | `string` | `''` | Returned when the input is `null`, `undefined`, or `NaN`. |
 
 Additional behaviour:
 
 - Infinite values (`Infinity`, `-Infinity`) are returned as strings without modification.
 - If no unit in `units` matches the absolute value, the smallest unit in the table is used as a fallback.
-- Helpers like `humanizeBytes` accept the same options (except `units`, which is preconfigured).
+- Helpers like `humanizeBytes` accept the same options (except `units` and `postfix`, which are preconfigured).
 
 ## Customize with your Own Units
 
-You can easily create your own unit tables:
+You can easily create your own unit tables. The design separates magnitude prefixes from quantity abbreviations:
 
 ```ts
-// Provide your own unit table
+// Option 1: Use SI/Binary prefixes with a postfix for the quantity
+import { Binary } from 'humanize-units';
+
+// Bytes using SI prefixes + 'B' postfix (SI is default, so units can be omitted)
+humanizeUnit(1_500, { postfix: 'B' }); // "1.5kB"
+humanizeUnit(1_048_576, { units: Binary, postfix: 'B' }); // "1MiB"
+
+// Voltage using SI prefixes + 'V' postfix
+humanizeUnit(0.0032, { postfix: 'V' }); // "3.2mV"
+
+// Option 2: Provide your own complete unit table (prefix + abbreviation combined)
 const distanceUnits = [
-  { value: 1_000, notation: 'km' },
-  { value: 1, notation: 'm' },
+  { value: 1_000, unit: 'km' },
+  { value: 1, unit: 'm' },
 ];
 humanizeUnit(1_500, { units: distanceUnits, significantDigits: 4 }); // "1.500km"
-
-// Generate SI tables on demand
-const voltageUnits = siUnits('V', { minExponent: -3, maxExponent: 6 });
-humanizeUnit(0.0032, { units: voltageUnits }); // "3.2mV"
 ```
 
 ## Built-in Units & Helpers
 
 | Unit table | Description | Helper |
 | --- | --- | --- |
-| `Count` | SI prefixes for general counts | `humanizeCount` |
-| `Bytes` | Decimal byte sizes (kB, MB, …) | `humanizeBytes` |
-| `BytesDecimal` | Alias of `Bytes` | `humanizeBytesDecimal` |
-| `BytesBinary` | Binary byte sizes (KiB, MiB, …) | `humanizeBytesBinary` |
+| `SI` | SI prefixes (k, M, G, …) | `humanizeCount` |
+| `Binary` | Binary prefixes (Ki, Mi, Gi, …) | - |
+| `Time` | Time units (s, m, h, d, …) | `humanizeTime` |
+| - | Decimal byte sizes (kB, MB, …) | `humanizeBytes` |
+| - | Binary byte sizes (KiB, MiB, …) | `humanizeBytesBinary` |
 | `Storage` | Decimal storage sizes | `humanizeStorage` |
 | `StorageBinary` | Binary storage sizes | `humanizeStorageBinary` |
 | `Time` | Seconds to years | `humanizeTime` |

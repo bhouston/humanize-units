@@ -13,7 +13,7 @@ export type HumanizeUnitOptions = {
    */
   units?: UnitArray;
   /**
-   * Text appended after the unit notation. Useful when using base prefix arrays
+   * Text appended after the unit. Useful when using base prefix arrays
    * like {@link SI} or {@link Binary} to separate the prefix from the unit
    * abbreviation. Defaults to an empty string.
    */
@@ -38,8 +38,8 @@ export type HumanizeUnitOptions = {
    */
   useGrouping?: boolean;
   /**
-   * Text inserted between the formatted value and the unit notation when the
-   * selected unit has a non-empty notation. Defaults to an empty string.
+   * Text inserted between the formatted value and the unit when the
+   * selected unit is non-empty. Defaults to an empty string.
    */
   unitSeparator?: string;
   /**
@@ -88,7 +88,7 @@ const selectUnit = (value: number, units: UnitArray) => {
  *
  * @param value Raw numeric input to format.
  * @param options Optional configuration overriding {@link HumanizeUnitOptions}.
- * @returns Human-readable number and unit notation.
+ * @returns Human-readable number and unit.
  */
 export const humanizeUnit = (value: number | null | undefined, options?: HumanizeUnitOptions) => {
   const {
@@ -124,9 +124,9 @@ export const humanizeUnit = (value: number | null | undefined, options?: Humaniz
   });
 
   const formattedNumber = formatter.format(value / divider);
-  const separator = targetUnit.notation || postfix ? unitSeparator : '';
+  const separator = targetUnit.unit || postfix ? unitSeparator : '';
 
-  return `${formattedNumber}${separator}${targetUnit.notation}${postfix}`;
+  return `${formattedNumber}${separator}${targetUnit.unit}${postfix}`;
 };
 
 /** @internal */

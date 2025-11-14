@@ -13,7 +13,7 @@ export type HumanizeHelper = (
  * Factory that binds a unit table and postfix to `humanizeUnit`.
  *
  * @param units Unit definitions applied by the generated helper.
- * @param postfix Postfix appended after the unit notation.
+ * @param postfix Postfix appended after the unit.
  * @returns Specialized helper function.
  */
 const createHelper =
