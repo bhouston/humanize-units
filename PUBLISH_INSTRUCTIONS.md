@@ -22,3 +22,4 @@ Follow this checklist when publishing a new version to npm.
 
 If the publish fails, inspect the npm error output, fix the issue, and rerun the publish script.
 
+

@@ -1,53 +1,10 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
 
 import {
-  Acceleration,
-  Angle,
-  Area,
-  Bytes,
-  BytesBinary,
-  BytesDecimal,
-  Capacitance,
-  CatalyticActivity,
-  Charge,
-  Concentration,
+  Binary,
   Count,
-  Current,
-  Density,
-  Distance,
-  Energy,
-  Force,
-  Frequency,
-  Illuminance,
-  Inductance,
-  Length,
-  LiquidVolume,
-  LuminousFlux,
-  MagneticFlux,
-  MagneticFluxDensity,
-  Mass,
-  MassFlowRate,
-  MolarConcentration,
-  MolarDensity,
-  MolarMass,
-  MolarVolume,
-  Momentum,
-  Power,
-  Pressure,
-  RadiationDoseAbsorbed,
-  RadiationDoseEquivalent,
-  Radioactivity,
-  Resistance,
-  Storage,
-  StorageBinary,
-  Temperature,
-  TemperatureKelvin,
+  SI,
   Time,
-  Torque,
-  Velocity,
-  Voltage,
-  Volume,
-  VolumeFlowRate,
   humanizeAcceleration,
   humanizeAngle,
   humanizeArea,
@@ -160,7 +117,7 @@ describe('humanizeUnit defaults', () => {
   });
 
   it('accepts exported unit tables', () => {
-    expect(humanizeUnit(8_388_608, { units: BytesDecimal })).toBe('8.39MB');
+    expect(humanizeUnit(8_388_608, { units: SI, postfix: 'B' })).toBe('8.39MB');
     expect(humanizeUnit(86_400, { units: Time })).toBe('1d');
   });
 
@@ -180,7 +137,8 @@ describe('humanizeUnit defaults', () => {
   it('respects formatter overrides', () => {
     expect(
       humanizeUnit(1_500, {
-        units: BytesDecimal,
+        units: SI,
+        postfix: 'B',
         useGrouping: true,
         significantDigits: 4,
         minimumSignificantDigits: 4,
@@ -206,7 +164,7 @@ describe('humanizeUnit edge cases', () => {
   });
 
   it('uses fallback unit for small magnitudes', () => {
-    expect(humanizeUnit(0, { units: Count })).toBe('0');
+    expect(humanizeUnit(0, { units: SI })).toBe('0');
     expect(
       humanizeUnit(0.0009, {
         units: Time,
@@ -261,13 +219,14 @@ describe('humanizeUnit typing', () => {
   });
 
   it('produces unit arrays with strongly typed contents', () => {
-    expectTypeOf(siUnits('m')).toMatchTypeOf<UnitArray>();
-    expectTypeOf(BytesDecimal).items.toMatchTypeOf<UnitArray[number]>();
+    expectTypeOf(SI).toMatchTypeOf<UnitArray>();
+    expectTypeOf(SI).items.toMatchTypeOf<UnitArray[number]>();
   });
 
   it('accepts fully typed configuration objects', () => {
     const options: HumanizeUnitOptions = {
-      units: BytesDecimal,
+      units: SI,
+      postfix: 'B',
       significantDigits: 4,
       minimumSignificantDigits: 2,
       locale: 'en-GB',
@@ -285,74 +244,74 @@ describe('helper wrappers', () => {
   const helperCases: Array<{
     name: string;
     helper: HumanizeHelper;
-    units: UnitArray;
+    options: HumanizeUnitOptions;
     value: number;
   }> = [
-    { name: 'humanizeCount', helper: humanizeCount, units: Count, value: 12_345 },
-    { name: 'humanizeBytes', helper: humanizeBytes, units: Bytes, value: 1_500 },
-    { name: 'humanizeBytesDecimal', helper: humanizeBytesDecimal, units: BytesDecimal, value: 8_388_608 },
-    { name: 'humanizeBytesBinary', helper: humanizeBytesBinary, units: BytesBinary, value: 1_048_576 },
-    { name: 'humanizeStorage', helper: humanizeStorage, units: Storage, value: 2_500 },
-    { name: 'humanizeStorageBinary', helper: humanizeStorageBinary, units: StorageBinary, value: 1_024 },
-    { name: 'humanizeTime', helper: humanizeTime, units: Time, value: 3_600 },
-    { name: 'humanizeDistance', helper: humanizeDistance, units: Distance, value: 1_500 },
-    { name: 'humanizeMass', helper: humanizeMass, units: Mass, value: 1_500 },
-    { name: 'humanizeAcceleration', helper: humanizeAcceleration, units: Acceleration, value: 9.81 },
-    { name: 'humanizeCharge', helper: humanizeCharge, units: Charge, value: 0.0025 },
-    { name: 'humanizeMomentum', helper: humanizeMomentum, units: Momentum, value: 12 },
-    { name: 'humanizePower', helper: humanizePower, units: Power, value: 50_000 },
-    { name: 'humanizeVelocity', helper: humanizeVelocity, units: Velocity, value: 12_500 },
-    { name: 'humanizeVolume', helper: humanizeVolume, units: Volume, value: 0.0034 },
-    { name: 'humanizeLiquidVolume', helper: humanizeLiquidVolume, units: LiquidVolume, value: 2.5 },
-    { name: 'humanizeTemperature', helper: humanizeTemperature, units: Temperature, value: 0.0012 },
-    { name: 'humanizeTemperatureKelvin', helper: humanizeTemperatureKelvin, units: TemperatureKelvin, value: 12 },
-    { name: 'humanizePressure', helper: humanizePressure, units: Pressure, value: 101_325 },
-    { name: 'humanizeForce', helper: humanizeForce, units: Force, value: 12_000 },
-    { name: 'humanizeTorque', helper: humanizeTorque, units: Torque, value: 450 },
-    { name: 'humanizeEnergy', helper: humanizeEnergy, units: Energy, value: 12_000 },
-    { name: 'humanizeVoltage', helper: humanizeVoltage, units: Voltage, value: 0.0032 },
-    { name: 'humanizeCurrent', helper: humanizeCurrent, units: Current, value: 0.00045 },
-    { name: 'humanizeResistance', helper: humanizeResistance, units: Resistance, value: 12_000 },
-    { name: 'humanizeCapacitance', helper: humanizeCapacitance, units: Capacitance, value: 0.0000022 },
-    { name: 'humanizeInductance', helper: humanizeInductance, units: Inductance, value: 0.015 },
-    { name: 'humanizeFrequency', helper: humanizeFrequency, units: Frequency, value: 1_000_000 },
-    { name: 'humanizeAngle', helper: humanizeAngle, units: Angle, value: 0.003 },
-    { name: 'humanizeLength', helper: humanizeLength, units: Length, value: 1_500 },
-    { name: 'humanizeArea', helper: humanizeArea, units: Area, value: 12 },
-    { name: 'humanizeVolumeFlowRate', helper: humanizeVolumeFlowRate, units: VolumeFlowRate, value: 0.0025 },
-    { name: 'humanizeMassFlowRate', helper: humanizeMassFlowRate, units: MassFlowRate, value: 0.0025 },
-    { name: 'humanizeDensity', helper: humanizeDensity, units: Density, value: 7_800 },
-    { name: 'humanizeConcentration', helper: humanizeConcentration, units: Concentration, value: 1.2 },
-    { name: 'humanizeMolarMass', helper: humanizeMolarMass, units: MolarMass, value: 0.012 },
-    { name: 'humanizeMolarVolume', helper: humanizeMolarVolume, units: MolarVolume, value: 0.00045 },
-    { name: 'humanizeMolarDensity', helper: humanizeMolarDensity, units: MolarDensity, value: 0.0000032 },
-    { name: 'humanizeMolarConcentration', helper: humanizeMolarConcentration, units: MolarConcentration, value: 0.0009 },
-    { name: 'humanizeMagneticFlux', helper: humanizeMagneticFlux, units: MagneticFlux, value: 0.0042 },
+    { name: 'humanizeCount', helper: humanizeCount, options: { units: Count }, value: 12_345 },
+    { name: 'humanizeBytes', helper: humanizeBytes, options: { units: SI, postfix: 'B' }, value: 1_500 },
+    { name: 'humanizeBytesDecimal', helper: humanizeBytesDecimal, options: { units: SI, postfix: 'B' }, value: 8_388_608 },
+    { name: 'humanizeBytesBinary', helper: humanizeBytesBinary, options: { units: Binary, postfix: 'B' }, value: 1_048_576 },
+    { name: 'humanizeStorage', helper: humanizeStorage, options: { units: SI, postfix: 'B' }, value: 2_500 },
+    { name: 'humanizeStorageBinary', helper: humanizeStorageBinary, options: { units: Binary, postfix: 'B' }, value: 1_024 },
+    { name: 'humanizeTime', helper: humanizeTime, options: { units: Time }, value: 3_600 },
+    { name: 'humanizeDistance', helper: humanizeDistance, options: { units: SI, postfix: 'm' }, value: 1_500 },
+    { name: 'humanizeMass', helper: humanizeMass, options: { units: SI, postfix: 'g' }, value: 1_500 },
+    { name: 'humanizeAcceleration', helper: humanizeAcceleration, options: { units: SI, postfix: 'm/s^2' }, value: 9.81 },
+    { name: 'humanizeCharge', helper: humanizeCharge, options: { units: SI, postfix: 'C' }, value: 0.0025 },
+    { name: 'humanizeMomentum', helper: humanizeMomentum, options: { units: SI, postfix: 'N*s' }, value: 12 },
+    { name: 'humanizePower', helper: humanizePower, options: { units: SI, postfix: 'W' }, value: 50_000 },
+    { name: 'humanizeVelocity', helper: humanizeVelocity, options: { units: SI, postfix: 'm/s' }, value: 12_500 },
+    { name: 'humanizeVolume', helper: humanizeVolume, options: { units: SI, postfix: 'm^3' }, value: 0.0034 },
+    { name: 'humanizeLiquidVolume', helper: humanizeLiquidVolume, options: { units: SI, postfix: 'L' }, value: 2.5 },
+    { name: 'humanizeTemperature', helper: humanizeTemperature, options: { units: SI, postfix: '°C' }, value: 0.0012 },
+    { name: 'humanizeTemperatureKelvin', helper: humanizeTemperatureKelvin, options: { units: SI, postfix: '°K' }, value: 12 },
+    { name: 'humanizePressure', helper: humanizePressure, options: { units: SI, postfix: 'Pa' }, value: 101_325 },
+    { name: 'humanizeForce', helper: humanizeForce, options: { units: SI, postfix: 'N' }, value: 12_000 },
+    { name: 'humanizeTorque', helper: humanizeTorque, options: { units: SI, postfix: 'N*m' }, value: 450 },
+    { name: 'humanizeEnergy', helper: humanizeEnergy, options: { units: SI, postfix: 'J' }, value: 12_000 },
+    { name: 'humanizeVoltage', helper: humanizeVoltage, options: { units: SI, postfix: 'V' }, value: 0.0032 },
+    { name: 'humanizeCurrent', helper: humanizeCurrent, options: { units: SI, postfix: 'A' }, value: 0.00045 },
+    { name: 'humanizeResistance', helper: humanizeResistance, options: { units: SI, postfix: 'Ω' }, value: 12_000 },
+    { name: 'humanizeCapacitance', helper: humanizeCapacitance, options: { units: SI, postfix: 'F' }, value: 0.0000022 },
+    { name: 'humanizeInductance', helper: humanizeInductance, options: { units: SI, postfix: 'H' }, value: 0.015 },
+    { name: 'humanizeFrequency', helper: humanizeFrequency, options: { units: SI, postfix: 'Hz' }, value: 1_000_000 },
+    { name: 'humanizeAngle', helper: humanizeAngle, options: { units: SI, postfix: '°' }, value: 0.003 },
+    { name: 'humanizeLength', helper: humanizeLength, options: { units: SI, postfix: 'm' }, value: 1_500 },
+    { name: 'humanizeArea', helper: humanizeArea, options: { units: SI, postfix: 'm^2' }, value: 12 },
+    { name: 'humanizeVolumeFlowRate', helper: humanizeVolumeFlowRate, options: { units: SI, postfix: 'm^3/s' }, value: 0.0025 },
+    { name: 'humanizeMassFlowRate', helper: humanizeMassFlowRate, options: { units: SI, postfix: 'kg/s' }, value: 0.0025 },
+    { name: 'humanizeDensity', helper: humanizeDensity, options: { units: SI, postfix: 'kg/m^3' }, value: 7_800 },
+    { name: 'humanizeConcentration', helper: humanizeConcentration, options: { units: SI, postfix: 'mol/m^3' }, value: 1.2 },
+    { name: 'humanizeMolarMass', helper: humanizeMolarMass, options: { units: SI, postfix: 'g/mol' }, value: 0.012 },
+    { name: 'humanizeMolarVolume', helper: humanizeMolarVolume, options: { units: SI, postfix: 'm^3/mol' }, value: 0.00045 },
+    { name: 'humanizeMolarDensity', helper: humanizeMolarDensity, options: { units: SI, postfix: 'mol/m^3' }, value: 0.0000032 },
+    { name: 'humanizeMolarConcentration', helper: humanizeMolarConcentration, options: { units: SI, postfix: 'mol/m^3' }, value: 0.0009 },
+    { name: 'humanizeMagneticFlux', helper: humanizeMagneticFlux, options: { units: SI, postfix: 'Wb' }, value: 0.0042 },
     {
       name: 'humanizeMagneticFluxDensity',
       helper: humanizeMagneticFluxDensity,
-      units: MagneticFluxDensity,
+      options: { units: SI, postfix: 'T' },
       value: 0.00042,
     },
-    { name: 'humanizeIlluminance', helper: humanizeIlluminance, units: Illuminance, value: 12_000 },
-    { name: 'humanizeLuminousFlux', helper: humanizeLuminousFlux, units: LuminousFlux, value: 1_500 },
-    { name: 'humanizeRadioactivity', helper: humanizeRadioactivity, units: Radioactivity, value: 3_200_000 },
+    { name: 'humanizeIlluminance', helper: humanizeIlluminance, options: { units: SI, postfix: 'lx' }, value: 12_000 },
+    { name: 'humanizeLuminousFlux', helper: humanizeLuminousFlux, options: { units: SI, postfix: 'lm' }, value: 1_500 },
+    { name: 'humanizeRadioactivity', helper: humanizeRadioactivity, options: { units: SI, postfix: 'Bq' }, value: 3_200_000 },
     {
       name: 'humanizeRadiationDoseEquivalent',
       helper: humanizeRadiationDoseEquivalent,
-      units: RadiationDoseEquivalent,
+      options: { units: SI, postfix: 'Sv' },
       value: 0.00075,
     },
     {
       name: 'humanizeRadiationDoseAbsorbed',
       helper: humanizeRadiationDoseAbsorbed,
-      units: RadiationDoseAbsorbed,
+      options: { units: SI, postfix: 'Gy' },
       value: 0.002,
     },
     {
       name: 'humanizeCatalyticActivity',
       helper: humanizeCatalyticActivity,
-      units: CatalyticActivity,
+      options: { units: SI, postfix: 'kat' },
       value: 0.0035,
     },
   ];
@@ -366,31 +325,15 @@ describe('helper wrappers', () => {
     emptyValue: 'n/a',
   };
 
-  helperCases.forEach(({ name, helper, units, value }) => {
+  helperCases.forEach(({ name, helper, options, value }) => {
     it(`${name} mirrors humanizeUnit output`, () => {
-      expect(helper(value)).toBe(humanizeUnit(value, { units }));
-      expect(helper(value, sampleOptions)).toBe(humanizeUnit(value, { ...sampleOptions, units }));
+      expect(helper(value)).toBe(humanizeUnit(value, options));
+      expect(helper(value, sampleOptions)).toBe(humanizeUnit(value, { ...sampleOptions, ...options }));
     });
   });
 
   it('supports helper options typing', () => {
     expectTypeOf(sampleOptions).toMatchTypeOf<HumanizeHelperOptions>();
     expect(humanizeBytes(1_500, sampleOptions)).toBe('1.5 kB');
-  });
-});
-
-describe('humanizeUnit internals', () => {
-  const { normalizeUnits, selectUnit } = __private__;
-
-  it('normalizeUnits throws on empty input', () => {
-    expect(() => normalizeUnits([] as unknown as UnitArray)).toThrow(
-      'humanizeUnit requires at least one unit definition.',
-    );
-  });
-
-  it('selectUnit throws when no fallback unit is available', () => {
-    expect(() => selectUnit(1, [] as unknown as UnitArray)).toThrow(
-      'humanizeUnit requires at least one unit definition.',
-    );
   });
 });

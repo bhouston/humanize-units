@@ -1,4 +1,4 @@
-import { Count, type UnitArray } from './units.js';
+import { SI, type UnitArray } from './units.js';
 
 /**
  * Configuration for `humanizeUnit`.
@@ -12,6 +12,12 @@ export type HumanizeUnitOptions = {
    * {@link Count}.
    */
   units?: UnitArray;
+  /**
+   * Text appended after the unit notation. Useful when using base prefix arrays
+   * like {@link SI} or {@link Binary} to separate the prefix from the unit
+   * abbreviation. Defaults to an empty string.
+   */
+  postfix?: string;
   /**
    * Upper bound for significant digits reported by `Intl.NumberFormat`.
    * Defaults to `3`.
@@ -47,32 +53,14 @@ export type HumanizeUnitOptions = {
  * Library-wide defaults for {@link HumanizeUnitOptions}.
  */
 const DEFAULT_OPTIONS: Required<HumanizeUnitOptions> = {
-  units: Count,
+  units: SI,
+  postfix: '',
   significantDigits: 3,
   minimumSignificantDigits: 1,
   locale: 'en-US',
   useGrouping: false,
   unitSeparator: '',
   emptyValue: '',
-};
-
-/**
- * Validates and sorts a unit table so the largest value appears first.
- *
- * @throws {Error} When the unit table is empty or contains non-positive values.
- */
-const normalizeUnits = (units: UnitArray) => {
-  if (!units.length) {
-    throw new Error('humanizeUnit requires at least one unit definition.');
-  }
-
-  const sorted = [...units].sort((a, b) => b.value - a.value);
-
-  if (sorted.some((unit) => unit.value <= 0)) {
-    throw new Error('humanizeUnit only supports units with a positive value.');
-  }
-
-  return sorted;
 };
 
 /**
@@ -106,6 +94,7 @@ export const humanizeUnit = (value: number | null | undefined, options?: Humaniz
   const {
     emptyValue = DEFAULT_OPTIONS.emptyValue,
     units = DEFAULT_OPTIONS.units,
+    postfix = DEFAULT_OPTIONS.postfix,
     locale = DEFAULT_OPTIONS.locale,
     significantDigits = DEFAULT_OPTIONS.significantDigits,
     minimumSignificantDigits = DEFAULT_OPTIONS.minimumSignificantDigits,
@@ -124,8 +113,7 @@ export const humanizeUnit = (value: number | null | undefined, options?: Humaniz
     return String(value);
   }
 
-  const normalizedUnits = normalizeUnits(units);
-  const targetUnit = selectUnit(value, normalizedUnits);
+  const targetUnit = selectUnit(value, units);
   /* c8 ignore next -- normalizeUnits already guarantees positive values */
   const divider = targetUnit.value || 1;
 
@@ -136,13 +124,12 @@ export const humanizeUnit = (value: number | null | undefined, options?: Humaniz
   });
 
   const formattedNumber = formatter.format(value / divider);
-  const separator = targetUnit.notation ? unitSeparator : '';
+  const separator = targetUnit.notation || postfix ? unitSeparator : '';
 
-  return `${formattedNumber}${separator}${targetUnit.notation}`;
+  return `${formattedNumber}${separator}${targetUnit.notation}${postfix}`;
 };
 
 /** @internal */
 export const __private__ = {
-  normalizeUnits,
   selectUnit,
 };
