@@ -165,7 +165,7 @@ describe('humanizeUnit edge cases', () => {
         significantDigits: 2,
         minimumSignificantDigits: 2,
       }),
-    ).toBe('0.90ms');
+    ).toBe('900µs');
   });
 
   it('works with custom unit arrays in correct order', () => {

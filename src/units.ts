@@ -53,7 +53,7 @@ export const Binary: UnitArray = [
 
 /** Alias of {@link BytesBinary}. */
 
-/** Time units ranging from milliseconds to years. */
+/** Time units ranging from femtoseconds to years. */
 export const Time: UnitArray = [
   { value: 31_536_000, notation: 'y' }, // 365 days
   { value: 604_800, notation: 'w' },
@@ -62,4 +62,8 @@ export const Time: UnitArray = [
   { value: 60, notation: 'm' },
   { value: 1, notation: 's' },
   { value: 0.001, notation: 'ms' },
+  { value: 0.000_001, notation: 'µs' },
+  { value: 0.000_000_001, notation: 'ns' },
+  { value: 0.000_000_000_001, notation: 'ps' },
+  { value: 0.000_000_000_000_001, notation: 'fs' },
 ];
