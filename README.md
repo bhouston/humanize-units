@@ -1,5 +1,8 @@
 # humanize-units
 
+[![Tests](https://github.com/bhouston/humanize-units/actions/workflows/test.yml/badge.svg)](https://github.com/bhouston/humanize-units/actions/workflows/test.yml)
+[![Coverage](https://raw.githubusercontent.com/bhouston/humanize-units/main/badges/coverage.svg)](https://github.com/bhouston/humanize-units/actions/workflows/test.yml)
+
 Lightweight TypeScript helpers for turning raw numeric values into human-friendly strings with unit suffixes. Optimized for treeshaking with a base footprint of 3 KB (about 1 KB minified). Published as a modern ESM package.
 
 ## Installation
