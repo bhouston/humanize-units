@@ -1,5 +1,7 @@
 # humanize-units
 
+[![NPM Package][npm]][npm-url]
+[![NPM Downloads][npm-downloads]][npmtrends-url]
 [![Tests](https://github.com/bhouston/humanize-units/actions/workflows/test.yml/badge.svg)](https://github.com/bhouston/humanize-units/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/bhouston/humanize-units/branch/main/graph/badge.svg)](https://codecov.io/gh/bhouston/humanize-units)
 
@@ -159,3 +161,8 @@ pnpm build
 ```
 
 Built artifacts land in `dist/`.
+
+[npm]: https://img.shields.io/npm/v/humanize-units
+[npm-url]: https://www.npmjs.com/package/humanize-units
+[npm-downloads]: https://img.shields.io/npm/dw/humanize-units
+[npmtrends-url]: https://www.npmtrends.com/humanize-units
