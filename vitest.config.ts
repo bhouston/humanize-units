@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     environment: 'node',
     coverage: {
-      reporter: ['text', 'html', 'json', 'json-summary'],
+      reporter: ['text', 'html', 'json', 'json-summary', 'lcov'],
     },
   },
 });
