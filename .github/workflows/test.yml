@@ -34,7 +34,7 @@ jobs:
         run: pnpm check
 
       - name: Run tests with coverage
-        run: pnpm test
+        run: pnpm vitest run --coverage
 
       - name: Generate coverage badge
         uses: jpb06/vitest-coverage-badge-action@v1
