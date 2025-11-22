@@ -15,6 +15,7 @@ export type Unit = {
 
 /**
  * Array of units ordered from largest to smallest magnitude.
+ * If it is not ordered, the results from humanizeUnitwill be wrong.
  */
 export type UnitArray = Unit[];
 
@@ -50,8 +51,6 @@ export const Binary: UnitArray = [
   { value: 1024 ** 1, unit: 'Ki' },
   { value: 1024 ** 0, unit: '' },
 ] as const;
-
-/** Alias of {@link BytesBinary}. */
 
 /** Time units ranging from femtoseconds to years. */
 export const Time: UnitArray = [
