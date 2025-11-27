@@ -1,4 +1,4 @@
-# humanize-units
+# Humanize Units
 
 [![NPM Package][npm]][npm-url]
 [![NPM Downloads][npm-downloads]][npmtrends-url]
