@@ -39,4 +39,3 @@ Thank you for your interest in improving `humanize-units`! Follow these guidelin
 - If you have a fix in mind, mention it so others can collaborate.
 
 We appreciate your contributions!
-

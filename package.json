@@ -2,13 +2,29 @@
   "name": "humanize-units",
   "version": "2.0.4",
   "description": "Efficient TypeScript utilities for converting numeric values to human friendly rounded strings with unit / magnitude prefixes.",
-  "type": "module",
+  "keywords": [
+    "bytes",
+    "count",
+    "esm",
+    "format",
+    "humanize",
+    "seconds",
+    "typescript",
+    "unit"
+  ],
+  "license": "MIT",
+  "author": "Ben Houston <ben@benhouston3d.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/bhouston/humanize-units.git"
   },
-  "author": "Ben Houston <ben@benhouston3d.com>",
-  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -16,41 +32,31 @@
     },
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "build": "tsc",
+    "prepare": "husky",
+    "build": "tsgo",
+    "tsc": "tsgo",
     "clean": "rimraf dist",
     "clean:all": "pnpm clean &&rimraf node_modules",
-    "check": "biome check --write",
+    "format": "oxfmt .",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
     "test": "vitest run --coverage",
     "test:watch": "vitest watch --coverage",
     "make-release": "node scripts/make-release.ts ."
   },
-  "keywords": [
-    "format",
-    "unit",
-    "bytes",
-    "count",
-    "seconds",
-    "typescript",
-    "humanize",
-    "esm"
-  ],
-  "sideEffects": false,
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "@typescript/native-preview": "7.0.0-dev.20251229.1",
+    "@vitest/coverage-v8": "2.1.9",
+    "husky": "^9.1.7",
+    "oxfmt": "^0.41.0",
+    "oxlint": "^1.56.0",
+    "rimraf": "^6.0.1",
+    "vitest": "^2.1.3"
+  },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "pnpm@10.17.0",
-  "devDependencies": {
-    "@biomejs/biome": "2.3.4",
-    "@types/node": "^22.7.4",
-    "@vitest/coverage-v8": "2.1.9",
-    "rimraf": "^6.0.1",
-    "typescript": "^5.6.3",
-    "vitest": "^2.1.3"
-  }
+  "packageManager": "pnpm@10.17.0"
 }

@@ -35,11 +35,17 @@ jobs:
       - name: Run type check
         run: pnpm tsc
 
-      - name: Run linter
-        run: pnpm check
+      - name: Run build
+        run: pnpm build
 
-      - name: Run tests with coverage
-        run: pnpm vitest run --coverage
+      - name: Run linter
+        run: pnpm lint
+
+      - name: Run format check
+        run: pnpm format
+
+      - name: Run tests
+        run: pnpm test
 
       - name: Find coverage files
         id: coverage
@@ -67,4 +73,3 @@ jobs:
           fail_ci_if_error: false
           directory: ./
           verbose: true
-
