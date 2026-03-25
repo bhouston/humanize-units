@@ -166,6 +166,10 @@ pnpm test # vitest
 
 Built artifacts land in `dist/`.
 
+## Author
+
+[Ben Houston](https://ben3d.ca), Sponsored by [Land of Assets](https://landofassets.com)
+
 [npm]: https://img.shields.io/npm/v/humanize-units
 [npm-url]: https://www.npmjs.com/package/humanize-units
 [npm-downloads]: https://img.shields.io/npm/dw/humanize-units
