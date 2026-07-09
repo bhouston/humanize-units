@@ -156,7 +156,7 @@ humanizeUnit(1_500, { units: distanceUnits, significantDigits: 4 }); // "1.500km
 
 ```bash
 pnpm install
-pnpm tsc # typescript-native
+pnpm tsc
 pnpm build
 pnpm lint # oxlint
 pnpm lint:fix

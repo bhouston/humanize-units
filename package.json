@@ -34,8 +34,8 @@
   },
   "scripts": {
     "prepare": "husky",
-    "build": "tsgo",
-    "tsc": "tsgo",
+    "build": "tsc",
+    "tsc": "tsc",
     "clean": "rimraf dist",
     "clean:all": "pnpm clean &&rimraf node_modules",
     "format": "oxfmt .",
@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
-    "@typescript/native-preview": "7.0.0-dev.20260421.2",
+    "typescript": "^7",
     "@vitest/coverage-v8": "^4.1.7",
     "husky": "^9.1.7",
     "oxfmt": "^0.41.0",
