@@ -4,7 +4,8 @@
   "editor.formatOnPaste": true,
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll.oxc": "explicit"
+    "source.fixAll.oxc": "explicit",
+    "source.format.oxc": "always"
   },
   "editor.codeActionsOnPaste": {
     "source.fixAll.oxc": "explicit"
@@ -20,5 +21,6 @@
   "[json]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
-  "typescript.native-preview.tsdk": "/Users/bhouston/Coding/OpenSource/humanize-units/node_modules/@typescript/native-preview"
+  "typescript.native-preview.tsdk": "/Users/bhouston/Coding/OpenSource/humanize-units/node_modules/@typescript/native-preview",
+  "editor.formatOnSaveMode": "file"
 }
