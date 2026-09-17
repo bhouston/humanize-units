@@ -2,7 +2,7 @@
 
 [![NPM Package][npm]][npm-url]
 [![NPM Downloads][npm-downloads]][npmtrends-url]
-[![Tests](https://github.com/bhouston/humanize-units/actions/workflows/test.yml/badge.svg)](https://github.com/bhouston/humanize-units/actions/workflows/test.yml)
+[![Tests](https://github.com/bhouston/humanize-units/actions/workflows/ci.yml/badge.svg)](https://github.com/bhouston/humanize-units/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/bhouston/humanize-units/branch/main/graph/badge.svg)](https://codecov.io/gh/bhouston/humanize-units)
 
 Lightweight TypeScript helpers for turning raw numeric values into human-friendly strings with unit suffixes. Optimized for treeshaking with a base footprint of 3 KB (about 1 KB minified). Published as a modern ESM package.
@@ -174,3 +174,7 @@ Built artifacts land in `dist/`.
 [npm-url]: https://www.npmjs.com/package/humanize-units
 [npm-downloads]: https://img.shields.io/npm/dw/humanize-units
 [npmtrends-url]: https://www.npmtrends.com/humanize-units
+
+## Contributing and releases
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the issue-first workflow and release setup. Changes integrate on `dev`; merging `dev` into `main` triggers automated npm publishing. Generated changelogs and package archives are available in [GitHub Releases](https://github.com/bhouston/humanize-units/releases). See [SECURITY.md](SECURITY.md) to report vulnerabilities.

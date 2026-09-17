@@ -1,0 +1,23 @@
+name: Feature or fix
+description: Propose a change with clear acceptance criteria.
+title: ''
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What should change and why? For bugs include reproduction steps and expected versus actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List observable outcomes that demonstrate completion.
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints
+      description: Compatibility, environment, scope, or other requirements.
