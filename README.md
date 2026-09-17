@@ -177,4 +177,4 @@ Built artifacts land in `dist/`.
 
 ## Contributing and releases
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the issue-first workflow and release setup. Changes integrate on `dev`; merging `dev` into `main` triggers automated npm publishing. Generated changelogs and package archives are available in [GitHub Releases](https://github.com/bhouston/humanize-units/releases). See [SECURITY.md](SECURITY.md) to report vulnerabilities.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the issue-first workflow and release setup. Changes merge directly into `main`; a maintainer manually triggers the release workflow to publish. Generated changelogs and package archives are available in [GitHub Releases](https://github.com/bhouston/humanize-units/releases). See [SECURITY.md](SECURITY.md) to report vulnerabilities.
