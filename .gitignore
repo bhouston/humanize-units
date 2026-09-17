@@ -4,3 +4,5 @@ dist
 .pnpm-debug.log
 coverage
 publish
+release
+.size-limit
