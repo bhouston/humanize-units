@@ -1,8 +1,8 @@
-# humanize-units
+# Humanize Units
 
 [![NPM Package][npm]][npm-url]
 [![NPM Downloads][npm-downloads]][npmtrends-url]
-[![Tests](https://github.com/bhouston/humanize-units/actions/workflows/test.yml/badge.svg)](https://github.com/bhouston/humanize-units/actions/workflows/test.yml)
+[![Tests](https://github.com/bhouston/humanize-units/actions/workflows/ci.yml/badge.svg)](https://github.com/bhouston/humanize-units/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/bhouston/humanize-units/branch/main/graph/badge.svg)](https://codecov.io/gh/bhouston/humanize-units)
 
 Lightweight TypeScript helpers for turning raw numeric values into human-friendly strings with unit suffixes. Optimized for treeshaking with a base footprint of 3 KB (about 1 KB minified). Published as a modern ESM package.
@@ -26,6 +26,7 @@ humanizeUnit(86_400, { units: Time }); // "1d"
 ### Helper shortcuts
 
 Every built-in unit table has a convenience helper that preconfigures `humanizeUnit` for you:
+
 ```ts
 import { humanizeBytes, humanizeTime } from 'humanize-units';
 
@@ -58,16 +59,16 @@ humanizeUnit(65, { units: Time, unitSeparator: ' ' }); // "1.08 m"
 
 `humanizeUnit(value, options)` accepts a numeric value (or `null` / `undefined`) and an optional configuration object:
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `units` | `UnitArray` | `SI` | Ordered list of unit breakpoints (magnitude prefixes). Provide your own to customize the prefixes and value thresholds. Since `SI` is the default, you can omit this option when using SI prefixes. |
-| `postfix` | `string` | `''` | Text appended after the unit. Useful when using base prefix arrays like `SI` (the default) or `Binary` to separate the prefix from the unit abbreviation (e.g., `'B'` for bytes, `'V'` for volts). |
-| `significantDigits` | `number` | `3` | Maximum number of significant digits to display. Passed to `Intl.NumberFormat`. |
-| `minimumSignificantDigits` | `number` | `1` | Minimum number of significant digits to display. |
-| `locale` | `string` | `'en-US'` | BCP 47 locale string forwarded to `Intl.NumberFormat`. |
-| `useGrouping` | `boolean` | `false` | Enables digit grouping separators (e.g. `1,000`). |
-| `unitSeparator` | `string` | `''` | Inserted between the formatted value and the unit. |
-| `emptyValue` | `string` | `''` | Returned when the input is `null`, `undefined`, or `NaN`. |
+| Option                     | Type        | Default   | Description                                                                                                                                                                                         |
+| -------------------------- | ----------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `units`                    | `UnitArray` | `SI`      | Ordered list of unit breakpoints (magnitude prefixes). Provide your own to customize the prefixes and value thresholds. Since `SI` is the default, you can omit this option when using SI prefixes. |
+| `postfix`                  | `string`    | `''`      | Text appended after the unit. Useful when using base prefix arrays like `SI` (the default) or `Binary` to separate the prefix from the unit abbreviation (e.g., `'B'` for bytes, `'V'` for volts).  |
+| `significantDigits`        | `number`    | `3`       | Maximum number of significant digits to display. Passed to `Intl.NumberFormat`.                                                                                                                     |
+| `minimumSignificantDigits` | `number`    | `1`       | Minimum number of significant digits to display.                                                                                                                                                    |
+| `locale`                   | `string`    | `'en-US'` | BCP 47 locale string forwarded to `Intl.NumberFormat`.                                                                                                                                              |
+| `useGrouping`              | `boolean`   | `false`   | Enables digit grouping separators (e.g. `1,000`).                                                                                                                                                   |
+| `unitSeparator`            | `string`    | `''`      | Inserted between the formatted value and the unit.                                                                                                                                                  |
+| `emptyValue`               | `string`    | `''`      | Returned when the input is `null`, `undefined`, or `NaN`.                                                                                                                                           |
 
 Additional behaviour:
 
@@ -100,69 +101,80 @@ humanizeUnit(1_500, { units: distanceUnits, significantDigits: 4 }); // "1.500km
 
 ## Built-in Units & Helpers
 
-| Unit table | Description | Helper |
-| --- | --- | --- |
-| `SI` | SI prefixes (k, M, G, …) | `humanizeCount` |
-| `Binary` | Binary prefixes (Ki, Mi, Gi, …) | - |
-| `Time` | Time units (s, m, h, d, …) | `humanizeTime` |
-| - | Decimal byte sizes (kB, MB, …) | `humanizeBytes` |
-| - | Binary byte sizes (KiB, MiB, …) | `humanizeBytesBinary` |
-| `Storage` | Decimal storage sizes | `humanizeStorage` |
-| `StorageBinary` | Binary storage sizes | `humanizeStorageBinary` |
-| `Time` | Seconds to years | `humanizeTime` |
-| `Distance` | SI distances (μm to Mm) | `humanizeDistance` |
-| `Mass` | SI masses (mg to Mg) | `humanizeMass` |
-| `Acceleration` | SI accelerations | `humanizeAcceleration` |
-| `Charge` | SI electric charge | `humanizeCharge` |
-| `Momentum` | SI momentum | `humanizeMomentum` |
-| `Power` | SI power (W) | `humanizePower` |
-| `Velocity` | SI velocity (m/s) | `humanizeVelocity` |
-| `Volume` | SI volume (m³) | `humanizeVolume` |
-| `LiquidVolume` | SI liquid volume (L) | `humanizeLiquidVolume` |
-| `Temperature` | Celsius with SI prefixes | `humanizeTemperature` |
-| `TemperatureKelvin` | Kelvin with SI prefixes | `humanizeTemperatureKelvin` |
-| `Pressure` | SI pressure (Pa) | `humanizePressure` |
-| `Force` | SI force (N) | `humanizeForce` |
-| `Torque` | SI torque (N·m) | `humanizeTorque` |
-| `Energy` | SI energy (J) | `humanizeEnergy` |
-| `Voltage` | SI voltage (V) | `humanizeVoltage` |
-| `Current` | SI current (A) | `humanizeCurrent` |
-| `Resistance` | SI resistance (Ω) | `humanizeResistance` |
-| `Capacitance` | SI capacitance (F) | `humanizeCapacitance` |
-| `Inductance` | SI inductance (H) | `humanizeInductance` |
-| `Frequency` | SI frequency (Hz) | `humanizeFrequency` |
-| `Angle` | SI angle (degrees) | `humanizeAngle` |
-| `Length` | SI length (m) | `humanizeLength` |
-| `Area` | SI area (m²) | `humanizeArea` |
-| `VolumeFlowRate` | SI volumetric flow (m³/s) | `humanizeVolumeFlowRate` |
-| `MassFlowRate` | SI mass flow (kg/s) | `humanizeMassFlowRate` |
-| `Density` | SI density (kg/m³) | `humanizeDensity` |
-| `Concentration` | SI concentration (mol/m³) | `humanizeConcentration` |
-| `MolarMass` | SI molar mass (g/mol) | `humanizeMolarMass` |
-| `MolarVolume` | SI molar volume (m³/mol) | `humanizeMolarVolume` |
-| `MolarDensity` | SI molar density (mol/m³) | `humanizeMolarDensity` |
-| `MolarConcentration` | Alias of `Concentration` | `humanizeMolarConcentration` |
-| `MagneticFlux` | Magnetic flux (weber) | `humanizeMagneticFlux` |
-| `MagneticFluxDensity` | Magnetic flux density (tesla) | `humanizeMagneticFluxDensity` |
-| `Illuminance` | Illuminance (lux) | `humanizeIlluminance` |
-| `LuminousFlux` | Luminous flux (lumen) | `humanizeLuminousFlux` |
-| `Radioactivity` | Radioactivity (becquerel) | `humanizeRadioactivity` |
-| `RadiationDoseEquivalent` | Equivalent dose (sievert) | `humanizeRadiationDoseEquivalent` |
-| `RadiationDoseAbsorbed` | Absorbed dose (gray) | `humanizeRadiationDoseAbsorbed` |
-| `CatalyticActivity` | Catalytic activity (katal) | `humanizeCatalyticActivity` |
+| Unit table                | Description                     | Helper                            |
+| ------------------------- | ------------------------------- | --------------------------------- |
+| `SI`                      | SI prefixes (k, M, G, …)        | `humanizeCount`                   |
+| `Binary`                  | Binary prefixes (Ki, Mi, Gi, …) | -                                 |
+| `Time`                    | Time units (s, m, h, d, …)      | `humanizeTime`                    |
+| -                         | Decimal byte sizes (kB, MB, …)  | `humanizeBytes`                   |
+| -                         | Binary byte sizes (KiB, MiB, …) | `humanizeBytesBinary`             |
+| `Storage`                 | Decimal storage sizes           | `humanizeStorage`                 |
+| `StorageBinary`           | Binary storage sizes            | `humanizeStorageBinary`           |
+| `Time`                    | Seconds to years                | `humanizeTime`                    |
+| `Distance`                | SI distances (μm to Mm)         | `humanizeDistance`                |
+| `Mass`                    | SI masses (mg to Mg)            | `humanizeMass`                    |
+| `Acceleration`            | SI accelerations                | `humanizeAcceleration`            |
+| `Charge`                  | SI electric charge              | `humanizeCharge`                  |
+| `Momentum`                | SI momentum                     | `humanizeMomentum`                |
+| `Power`                   | SI power (W)                    | `humanizePower`                   |
+| `Velocity`                | SI velocity (m/s)               | `humanizeVelocity`                |
+| `Volume`                  | SI volume (m³)                  | `humanizeVolume`                  |
+| `LiquidVolume`            | SI liquid volume (L)            | `humanizeLiquidVolume`            |
+| `Temperature`             | Celsius with SI prefixes        | `humanizeTemperature`             |
+| `TemperatureKelvin`       | Kelvin with SI prefixes         | `humanizeTemperatureKelvin`       |
+| `Pressure`                | SI pressure (Pa)                | `humanizePressure`                |
+| `Force`                   | SI force (N)                    | `humanizeForce`                   |
+| `Torque`                  | SI torque (N·m)                 | `humanizeTorque`                  |
+| `Energy`                  | SI energy (J)                   | `humanizeEnergy`                  |
+| `Voltage`                 | SI voltage (V)                  | `humanizeVoltage`                 |
+| `Current`                 | SI current (A)                  | `humanizeCurrent`                 |
+| `Resistance`              | SI resistance (Ω)               | `humanizeResistance`              |
+| `Capacitance`             | SI capacitance (F)              | `humanizeCapacitance`             |
+| `Inductance`              | SI inductance (H)               | `humanizeInductance`              |
+| `Frequency`               | SI frequency (Hz)               | `humanizeFrequency`               |
+| `Angle`                   | SI angle (degrees)              | `humanizeAngle`                   |
+| `Length`                  | SI length (m)                   | `humanizeLength`                  |
+| `Area`                    | SI area (m²)                    | `humanizeArea`                    |
+| `VolumeFlowRate`          | SI volumetric flow (m³/s)       | `humanizeVolumeFlowRate`          |
+| `MassFlowRate`            | SI mass flow (kg/s)             | `humanizeMassFlowRate`            |
+| `Density`                 | SI density (kg/m³)              | `humanizeDensity`                 |
+| `Concentration`           | SI concentration (mol/m³)       | `humanizeConcentration`           |
+| `MolarMass`               | SI molar mass (g/mol)           | `humanizeMolarMass`               |
+| `MolarVolume`             | SI molar volume (m³/mol)        | `humanizeMolarVolume`             |
+| `MolarDensity`            | SI molar density (mol/m³)       | `humanizeMolarDensity`            |
+| `MolarConcentration`      | Alias of `Concentration`        | `humanizeMolarConcentration`      |
+| `MagneticFlux`            | Magnetic flux (weber)           | `humanizeMagneticFlux`            |
+| `MagneticFluxDensity`     | Magnetic flux density (tesla)   | `humanizeMagneticFluxDensity`     |
+| `Illuminance`             | Illuminance (lux)               | `humanizeIlluminance`             |
+| `LuminousFlux`            | Luminous flux (lumen)           | `humanizeLuminousFlux`            |
+| `Radioactivity`           | Radioactivity (becquerel)       | `humanizeRadioactivity`           |
+| `RadiationDoseEquivalent` | Equivalent dose (sievert)       | `humanizeRadiationDoseEquivalent` |
+| `RadiationDoseAbsorbed`   | Absorbed dose (gray)            | `humanizeRadiationDoseAbsorbed`   |
+| `CatalyticActivity`       | Catalytic activity (katal)      | `humanizeCatalyticActivity`       |
 
 ## Development
 
 ```bash
 pnpm install
-pnpm lint
-pnpm test
+pnpm tsc
 pnpm build
+pnpm lint # oxlint
+pnpm lint:fix
+pnpm format # oxfmt
+pnpm test # vitest
 ```
 
 Built artifacts land in `dist/`.
+
+## Author
+
+[Ben Houston](https://ben3d.ca), Sponsored by [Land of Assets](https://landofassets.com)
 
 [npm]: https://img.shields.io/npm/v/humanize-units
 [npm-url]: https://www.npmjs.com/package/humanize-units
 [npm-downloads]: https://img.shields.io/npm/dw/humanize-units
 [npmtrends-url]: https://www.npmtrends.com/humanize-units
+
+## Contributing and releases
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the issue-first workflow and release setup. Changes integrate on `dev`; merging `dev` into `main` triggers automated npm publishing. Generated changelogs and package archives are available in [GitHub Releases](https://github.com/bhouston/humanize-units/releases). See [SECURITY.md](SECURITY.md) to report vulnerabilities.

@@ -23,12 +23,25 @@ const createHelper =
 
 /** Formats counts using SI prefixes (k, M, G…). */
 export const humanizeCount = createHelper(SI);
+
 /** Formats decimal bytes (kB, MB, GB…). */
 export const humanizeBytes = createHelper(SI, 'B');
 /** Alias of {@link humanizeBytes}. */
 export const humanizeBytesDecimal = createHelper(SI, 'B');
 /** Formats binary bytes (KiB, MiB, GiB…). */
 export const humanizeBytesBinary = createHelper(Binary, 'B');
+/** Formats byte rate (Bps). */
+export const humanizeByteRate = createHelper(SI, 'Bps');
+
+/** Formats bits (b, kb, Mb, Gb, Tb, Pb, Eb, Zb, Yb). */
+export const humanizeBits = createHelper(SI, 'b');
+/** Alias of {@link humanizeBits}. */
+export const humanizeBitsDecimal = createHelper(SI, 'b');
+/** Formats bytes (B, kB, MB, GB, TB, PB, EB, ZB, YB). */
+export const humanizeBitsBinary = createHelper(Binary, 'b');
+/** Formats bit rate (bps). */
+export const humanizeBitRate = createHelper(SI, 'bps');
+
 /** Formats decimal storage capacities. */
 export const humanizeStorage = createHelper(SI, 'B');
 /** Formats binary storage capacities. */
