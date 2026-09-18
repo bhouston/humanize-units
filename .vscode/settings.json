@@ -10,17 +10,8 @@
   "editor.codeActionsOnPaste": {
     "source.fixAll.oxc": "explicit"
   },
-  "typescript.experimental.useTsgo": true,
-  "javascript.preferences.importModuleSpecifier": "relative",
-  "typescript.preferences.importModuleSpecifier": "relative",
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  "typescript.updateImportsOnFileMove.enabled": "always",
   "workbench.editor.enablePreview": false,
   "oxc.typeAware": true,
   "oxc.useExecPath": true,
-  "[json]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
-  },
-  "typescript.native-preview.tsdk": "/Users/bhouston/Coding/OpenSource/humanize-units/node_modules/@typescript/native-preview",
   "editor.formatOnSaveMode": "file"
 }
