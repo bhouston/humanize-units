@@ -5,7 +5,7 @@ export default {
     ['@semantic-release/commit-analyzer', { preset: 'conventionalcommits' }],
     ['@semantic-release/release-notes-generator', { preset: 'conventionalcommits' }],
     '@semantic-release/changelog',
-    ['@semantic-release/npm', { tarballDir: 'release' }],
+    ['@anolilab/semantic-release-pnpm', { tarballDir: 'release' }],
     [
       '@semantic-release/github',
       {
