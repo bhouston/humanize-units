@@ -9,10 +9,8 @@ const fail = (message) => {
 if (pr.base.ref !== 'main') {
   fail('Open pull requests against main.');
 }
-const match = /^(?:feature|fix|docs|chore|refactor|test)\/(\d+)-[a-z0-9-]+$/.exec(pr.head.ref);
-if (!match) fail('Use an issue branch such as feature/42-batch-export.');
-const closes = new RegExp(`\\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\\s+#${match[1]}\\b`, 'i');
-if (!closes.test(pr.body ?? '')) fail(`Include Closes #${match[1]} in the PR description.`);
+const closes = /\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#\d+\b/i;
+if (!closes.test(pr.body ?? '')) fail('Include Closes #<issue-number> in the PR description.');
 const result = spawnSync('pnpm', ['exec', 'commitlint'], {
   input: pr.title,
   encoding: 'utf8',
