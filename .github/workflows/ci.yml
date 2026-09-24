@@ -26,6 +26,12 @@ jobs:
         if: github.event_name == 'pull_request'
         run: node scripts/check-pr.mjs
       - run: pnpm check
+      - name: Verify published package includes dist
+        run: |
+          pnpm pack --dry-run | grep -qx 'dist/index.js' || {
+            echo "::error::dist/index.js missing from the packed tarball; the publish step would ship a broken package."
+            exit 1
+          }
       - name: Upload coverage
         uses: codecov/codecov-action@v5
         with:
