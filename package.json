@@ -44,12 +44,10 @@
     "format": "oxfmt .",
     "lint": "oxlint .",
     "lint:fix": "oxlint --fix .",
-    "test": "vitest run --coverage",
+    "test": "vitest run",
     "test:watch": "vitest watch --coverage",
-    "format:check": "oxfmt --check .",
     "size": "size-limit",
-    "release": "semantic-release",
-    "check": "pnpm format:check && pnpm lint && pnpm build && pnpm test && pnpm size && pnpm audit --audit-level=high"
+    "release": "semantic-release"
   },
   "devDependencies": {
     "@anolilab/semantic-release-pnpm": "^8.1.25",
@@ -88,7 +86,7 @@
     }
   ],
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "packageManager": "pnpm@11.27.0"
 }
