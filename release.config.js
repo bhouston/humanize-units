@@ -4,12 +4,11 @@ export default {
   plugins: [
     ['@semantic-release/commit-analyzer', { preset: 'conventionalcommits' }],
     ['@semantic-release/release-notes-generator', { preset: 'conventionalcommits' }],
-    '@semantic-release/changelog',
     ['@anolilab/semantic-release-pnpm', { tarballDir: 'release' }],
     [
       '@semantic-release/github',
       {
-        assets: ['CHANGELOG.md', 'release/*.tgz'],
+        assets: ['release/*.tgz'],
         successComment: false,
         failComment: false,
         failTitle: false,
