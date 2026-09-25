@@ -167,6 +167,10 @@ pnpm test # vitest
 
 Built artifacts land in `dist/`.
 
+CI also runs `pnpm check`, which enforces 100% statement/branch/function/line coverage, a 2 kB
+compressed bundle limit (size-limit), and a dependency audit at `high`/`critical` severity. See
+[RELEASING.md](RELEASING.md) for details and how to change these thresholds.
+
 ## Author
 
 [Ben Houston](https://ben3d.ca), Sponsored by [Land of Assets](https://landofassets.com)
@@ -179,4 +183,4 @@ Built artifacts land in `dist/`.
 
 ## Contributing and releases
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the issue-first workflow and release setup. Changes merge directly into `main`; a maintainer manually triggers the release workflow to publish. Generated changelogs and package archives are available in [GitHub Releases](https://github.com/bhouston/humanize-units/releases). See [SECURITY.md](SECURITY.md) to report vulnerabilities.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the issue-first workflow and [RELEASING.md](RELEASING.md) for release setup and mechanics. Changes merge directly into `main`; a maintainer manually triggers the release workflow to publish. Generated changelogs and package archives are available in [GitHub Releases](https://github.com/bhouston/humanize-units/releases). See [SECURITY.md](SECURITY.md) to report vulnerabilities.
