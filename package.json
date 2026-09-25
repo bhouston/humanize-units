@@ -59,7 +59,7 @@
     "@semantic-release/release-notes-generator": "^14.1.1",
     "@size-limit/preset-small-lib": "^14.0.0",
     "@types/node": "^22.20.3",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^5.0.1",
     "conventional-changelog-conventionalcommits": "^10.4.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.5.1",
@@ -70,7 +70,7 @@
     "size-limit": "^14.0.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.0",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
