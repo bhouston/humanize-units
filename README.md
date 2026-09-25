@@ -4,6 +4,7 @@
 [![NPM Downloads][npm-downloads]][npmtrends-url]
 [![Tests](https://github.com/bhouston/humanize-units/actions/workflows/ci.yml/badge.svg)](https://github.com/bhouston/humanize-units/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/bhouston/humanize-units/branch/main/graph/badge.svg)](https://codecov.io/gh/bhouston/humanize-units)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Chat-5865F2?logo=discord&logoColor=white)][discord-url]
 
 Lightweight TypeScript helpers for turning raw numeric values into human-friendly strings with unit suffixes. Optimized for treeshaking with a base footprint of 3 KB (about 1 KB minified). Published as a modern ESM package.
 
@@ -174,6 +175,7 @@ Built artifacts land in `dist/`.
 [npm-url]: https://www.npmjs.com/package/humanize-units
 [npm-downloads]: https://img.shields.io/npm/dw/humanize-units
 [npmtrends-url]: https://www.npmtrends.com/humanize-units
+[discord-url]: https://discord.gg/fwupDN493R
 
 ## Contributing and releases
 
