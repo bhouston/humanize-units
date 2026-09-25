@@ -1,50 +1,59 @@
 # Contributing
 
-This is the shared workflow standard for people, Claude, and Codex. Agent entry files point here; keep the rules in this file.
+These rules apply to every contributor, human or AI agent (Claude, Codex, and others). This file is the single source of truth for the workflow; `AGENTS.md` and `CLAUDE.md` only point here.
 
-## Issue, branch, commit, pull request
+## Issue → branch → PR
 
-1. Before starting a feature or fix, open or reuse a GitHub issue. Include a description (what and why), acceptance criteria, and constraints, following the **Feature or fix** issue template. Agents should use `gh issue create` with the same sections.
-2. Fetch origin and create a branch from `origin/main`. Branch names are not restricted to any naming convention. Never commit directly to `main`.
-3. Implement the issue and update tests and documentation as needed. Every commit must use Conventional Commits: `type(scope): description`, with an optional scope. Use `feat` for a minor release, `fix` for a patch, and `!` or a `BREAKING CHANGE:` footer for a major release. `docs`, `chore`, `refactor`, `test`, `style`, `perf`, `build`, `ci`, and `revert` are also valid; the conventionalcommits preset treats `perf` as a patch. Other non-breaking maintenance commits do not release. Reference the issue in the commit body when useful.
-4. Run `pnpm check`. Push the branch and open a PR against **main** with a Conventional Commit title and `Closes #<issue-number>` in the description. Describe resulting behavior and validation. CI validates the title and issue reference. Husky validates local commit messages. Hooks can be bypassed, so commit messages must always be reviewed.
-5. PRs are merged into `main` with merge commits; do not squash or rebase-merge. Every commit must already carry a Conventional Commit message and any breaking-change footer, since Semantic Release reads the merged commits. Merging into `main` closes the linked issue.
-6. When ready to release, run `gh workflow run release.yml --ref main`. The `Release` workflow only accepts manual dispatch on `main`; it repeats quality checks, then publishes through npm trusted publishing if releasable commits exist since the last release. Merging PRs never publishes by itself. Add `-f dry_run=true` to preview without publishing.
+1. **Start with an issue.** Before a feature, fix, or other tracked change, open a GitHub issue (or reuse one that already covers it) with the problem, motivation, constraints, and testable acceptance criteria. Agents use `gh issue create` with the same sections.
+2. **Branch from `main`.** Fetch and branch from current `origin/main`, named `<type>/<issue>-<short-description>` (for example `feat/42-batch-export`). Never commit directly to `main`. Use a separate worktree when you have unrelated local changes.
+3. **Commit with Conventional Commits** (see below). Reference the issue in the commit body where useful.
+4. **Run the local checks** below and fix failures before opening the PR.
+5. **Open a PR against `main`** with a Conventional Commit title, `Closes #<issue>` in the body, a description of the resulting behavior, and the validation you ran.
+6. **Merge only on green CI.** Every required check must pass. PRs are merged with merge commits (`gh pr merge --merge`); never squash or rebase-merge. Do not merge your own PR unless the maintainer asked you to.
 
-## Local setup and checks
+`main` is the default branch and the only integration branch. There are no long-lived release, promotion, or sync branches.
 
-Use the development Node version in `.nvmrc` and the pnpm version in `package.json` (currently Node 26 and pnpm 11). The package runtime engine declaration is separate from the development toolchain.
+## Commit format
+
+Use `type(optional-scope): description` in the imperative mood. Allowed types: `feat`, `fix`, `perf`, `docs`, `chore`, `refactor`, `test`, `style`, `build`, `ci`, `revert`.
+
+- `feat:` produces a minor release.
+- `fix:` and `perf:` produce a patch release.
+- `feat!:` (any type with `!`) or a `BREAKING CHANGE:` footer produces a major release.
+- Other types do not trigger a release on their own.
+
+Husky runs commitlint on every commit after `pnpm install`. CI checks the PR title and every commit in the PR. Git-generated merge commits are exempt.
+
+## Local checks
+
+Use the Node version in `.nvmrc` and the pnpm version pinned in `package.json` (`packageManager`).
 
 ```sh
-pnpm install
-pnpm check
+pnpm install --frozen-lockfile
+pnpm build
+pnpm tsc
+pnpm lint
+pnpm test
 ```
 
-`pnpm check` checks formatting and lint, cleans and builds TypeScript declarations, runs tests with **100% statements, branches, functions, and lines coverage**, enforces a **2 kB compressed bundle limit** with size-limit, and audits all dependencies for high or critical vulnerabilities. Lower-severity audit findings remain visible. Change thresholds only with a justified PR. `pnpm format`, `pnpm lint:fix`, and `pnpm test:watch` support development.
+The Husky pre-commit hook formats and lints staged files (`oxfmt`, `oxlint --fix`) and type-checks the workspace. CI runs the same checks plus any repository-specific gates, such as coverage floors, bundle-size budgets, package-content checks, and a dependency audit; see `.github/workflows/ci.yml`. Explain any intentional threshold change in the PR.
 
-CI reports size-limit results in its logs and uploads coverage as an artifact. Codecov receives `coverage/lcov.info`; configure the `CODECOV_TOKEN` Actions secret for badge updates. Codecov upload failures are nonblocking; the local coverage gate is mandatory.
+## Releases
 
-## Release setup for maintainers
+Merging to `main` never publishes. A release is a separate, deliberate step that the maintainer triggers whenever the changes accumulated on `main` should ship:
 
-On npm, open **humanize-units → Settings → Trusted publishing**, choose GitHub Actions, and enter:
+```sh
+gh workflow run release.yml --ref main                  # release
+gh workflow run release.yml --ref main -f dry_run=true  # preview only, publishes nothing
+```
 
-| Field                | Value                                             |
-| -------------------- | ------------------------------------------------- |
-| Organization or user | `bhouston`                                        |
-| Repository           | `humanize-units`                                  |
-| Workflow filename    | `release.yml`                                     |
-| Environment          | Leave blank (the job does not use an environment) |
+The Release workflow refuses any ref other than `main`, re-runs CI on the dispatched commit, and then uses semantic-release to compute the next version from the Conventional Commits since the last release tag, generate release notes, create the tag and GitHub Release, and publish:
 
-Configure this before dispatching the release workflow. Publishing uses GitHub-hosted runners with `id-token: write`, the pinned pnpm CLI (via `@anolilab/semantic-release-pnpm`, which runs `pnpm publish` under the hood), and no `NPM_TOKEN` or `NODE_AUTH_TOKEN`. Do not add `registry-url` to setup-node. See the [npm trusted publishing documentation](https://docs.npmjs.com/trusted-publishers/) and [Semantic Release GitHub Actions guide](https://semantic-release.org/recipes/ci-configurations/github-actions/).
+- npm packages, through npm trusted publishing (GitHub OIDC, no `NPM_TOKEN`);
+- VS Code extensions, where the repository has one, to the VS Code Marketplace and Open VSX.
 
-The existing npm release `2.0.4` records git commit `e34af8c44669600a5c33a9fdcaf0c6a4b4c1830b`. The missing `v2.0.4` tag has been restored at that exact commit. The release workflow verifies a `v<version>` tag matching the current `package.json` version exists before publishing (dynamically, not a hardcoded version), to catch this class of missing-tag problem again. Never move existing release tags.
+When there are no release-worthy commits, the run is a no-op. Never bump versions, edit changelogs, or push release tags by hand.
 
-Semantic Release determines the version from tags and commits, updates the package version in the publish workspace, generates a per-release `CHANGELOG.md`, and publishes to npm with provenance via `pnpm publish` (through `@anolilab/semantic-release-pnpm`) plus a GitHub Release containing release notes, the changelog, and the package archive. GitHub Releases are the cumulative changelog. The repository's `package.json` version stays at the bootstrap value; it is not the published version source of truth. Release automation does not push version/changelog commits to protected branches. Never manually bump versions or use the removed manual publish script.
+## Security
 
-Enable branch protection/rulesets for `main`: require PRs, require the `ci` check, and block direct pushes, force pushes, and deletion. The release workflow only runs on manual dispatch, so its `checks / ci` status never gates ordinary PRs. Enable merge commits only; disable squash and rebase merging. These GitHub settings are separate from the workflow files.
-
-A dry run (`pnpm release --dry-run`) needs GitHub authentication and must run on `main` to produce a meaningful release preview; on a feature branch it will skip releasing. Full OIDC verification requires a GitHub Actions run after npm trust is configured. Setup does not publish anything.
-
-## Rollout to other repositories
-
-Validate this pilot's issue → branch → PR flow and first trusted release before extracting a template repository. Copy `CONTRIBUTING.md`, the agent pointers, commitlint configuration, Husky commit-msg hook, issue/PR templates, security policy, workflow files, PR validation script, and release configuration. Merge package scripts/dependencies and coverage/size settings into each target rather than overwriting its package manifest. Adapt repository URLs, npm package, release baseline, Node/pnpm versions, thresholds, and security contact; preserve each repository's license. A template repository and copy script should follow the successful pilot, not precede it.
+Report vulnerabilities privately through GitHub's private vulnerability reporting (see `SECURITY.md` where present), never in a public issue.
