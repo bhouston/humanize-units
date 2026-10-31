@@ -3,6 +3,7 @@ import { configDefaults, coverageConfigDefaults, defineConfig } from 'vitest/con
 export default defineConfig({
   test: {
     environment: 'node',
+    fsModuleCache: true,
     include: ['tests/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
     exclude: [...configDefaults.exclude, '**/coverage/**', '**/dist/**'],
     coverage: {
