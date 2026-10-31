@@ -2,7 +2,6 @@ import { describe, expect, expectTypeOf, it } from 'vitest';
 
 import {
   Binary,
-  Count,
   SI,
   Time,
   humanizeAcceleration,
@@ -53,8 +52,6 @@ import {
   humanizeVoltage,
   humanizeVolume,
   humanizeVolumeFlowRate,
-  type HumanizeHelper,
-  type HumanizeHelperOptions,
   type HumanizeUnitOptions,
   type UnitArray,
 } from '../src/index.js';
@@ -140,7 +137,7 @@ describe('humanizeUnit defaults', () => {
     ).toBe('1.500kB');
     expect(
       humanizeUnit(12_345_678, {
-        units: Count,
+        units: SI,
         locale: 'de-DE',
         useGrouping: true,
         significantDigits: 4,
@@ -193,7 +190,7 @@ describe('humanizeUnit edge cases', () => {
     // Test with different formatting options
     expect(
       humanizeUnit(-1_500, {
-        units: Count,
+        units: SI,
         unitSeparator: ' ',
       }),
     ).toBe('-1.5 k');
@@ -209,13 +206,13 @@ describe('humanizeUnit edge cases', () => {
   it('respects custom separators and minimum digits', () => {
     expect(
       humanizeUnit(1_500, {
-        units: Count,
+        units: SI,
         unitSeparator: ' ',
       }),
     ).toBe('1.5 k');
     expect(
       humanizeUnit(12, {
-        units: Count,
+        units: SI,
         significantDigits: 3,
         minimumSignificantDigits: 3,
       }),
@@ -260,11 +257,11 @@ describe('humanizeUnit typing', () => {
 describe('helper wrappers', () => {
   const helperCases: Array<{
     name: string;
-    helper: HumanizeHelper;
+    helper: typeof humanizeCount;
     options: HumanizeUnitOptions;
     value: number;
   }> = [
-    { name: 'humanizeCount', helper: humanizeCount, options: { units: Count }, value: 12_345 },
+    { name: 'humanizeCount', helper: humanizeCount, options: { units: SI }, value: 12_345 },
     { name: 'humanizeBytes', helper: humanizeBytes, options: { units: SI, postfix: 'B' }, value: 1_500 },
     {
       name: 'humanizeBytesDecimal',
@@ -403,7 +400,7 @@ describe('helper wrappers', () => {
     },
   ];
 
-  const sampleOptions: HumanizeHelperOptions = {
+  const sampleOptions: Omit<HumanizeUnitOptions, 'units' | 'postfix'> = {
     significantDigits: 4,
     minimumSignificantDigits: 2,
     locale: 'en-US',
@@ -420,7 +417,7 @@ describe('helper wrappers', () => {
   });
 
   it('supports helper options typing', () => {
-    expectTypeOf(sampleOptions).toMatchTypeOf<HumanizeHelperOptions>();
+    expectTypeOf(sampleOptions).toMatchTypeOf<Omit<HumanizeUnitOptions, 'units' | 'postfix'>>();
     expect(humanizeBytes(1_500, sampleOptions)).toBe('1.5 kB');
   });
 });
