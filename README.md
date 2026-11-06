@@ -148,6 +148,8 @@ humanizeUnit(1_500, { units: distanceUnits, significantDigits: 4 }); // "1.500km
 | `MagneticFluxDensity`     | Magnetic flux density (tesla)   | `humanizeMagneticFluxDensity`     |
 | `Illuminance`             | Illuminance (lux)               | `humanizeIlluminance`             |
 | `LuminousFlux`            | Luminous flux (lumen)           | `humanizeLuminousFlux`            |
+| -                         | Luminous intensity (candela)    | `humanizeLuminousIntensity`       |
+| -                         | Luminous efficacy (lumen/watt)  | `humanizeLuminousEfficacy`        |
 | `Radioactivity`           | Radioactivity (becquerel)       | `humanizeRadioactivity`           |
 | `RadiationDoseEquivalent` | Equivalent dose (sievert)       | `humanizeRadiationDoseEquivalent` |
 | `RadiationDoseAbsorbed`   | Absorbed dose (gray)            | `humanizeRadiationDoseAbsorbed`   |
