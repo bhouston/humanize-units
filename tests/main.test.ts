@@ -26,6 +26,8 @@ import {
   humanizeLength,
   humanizeLiquidVolume,
   humanizeLuminousFlux,
+  humanizeLuminousIntensity,
+  humanizeLuminousEfficacy,
   humanizeMagneticFlux,
   humanizeMagneticFluxDensity,
   humanizeMass,
@@ -419,5 +421,18 @@ describe('helper wrappers', () => {
   it('supports helper options typing', () => {
     expectTypeOf(sampleOptions).toMatchTypeOf<Omit<HumanizeUnitOptions, 'units' | 'postfix'>>();
     expect(humanizeBytes(1_500, sampleOptions)).toBe('1.5 kB');
+  });
+});
+
+describe('photometric helpers', () => {
+  it.each([
+    [humanizeLuminousIntensity, 'cd'],
+    [humanizeLuminousEfficacy, 'lm/W'],
+  ] as const)('formats base, prefixed, zero and missing measurements', (format, unit) => {
+    expect(format(125, { unitSeparator: ' ' })).toBe(`125 ${unit}`);
+    expect(format(12500, { unitSeparator: ' ' })).toBe(`12.5 k${unit}`);
+    expect(format(0, { unitSeparator: ' ' })).toBe(`0 ${unit}`);
+    expect(format(null, { emptyValue: 'Not available' })).toBe('Not available');
+    expect(format(undefined)).toBe('');
   });
 });

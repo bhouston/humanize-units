@@ -120,6 +120,10 @@ export const humanizeMagneticFluxDensity = createHelper(SI, 'T');
 export const humanizeIlluminance = createHelper(SI, 'lx');
 /** Formats luminous flux (lumen). */
 export const humanizeLuminousFlux = createHelper(SI, 'lm');
+/** Formats luminous intensity (candela). */
+export const humanizeLuminousIntensity = createHelper(SI, 'cd');
+/** Formats luminous efficacy (lumen per watt). */
+export const humanizeLuminousEfficacy = createHelper(SI, 'lm/W');
 /** Formats radioactivity (becquerel). */
 export const humanizeRadioactivity = createHelper(SI, 'Bq');
 /** Formats equivalent dose (sievert). */
