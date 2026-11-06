@@ -1,12 +1,25 @@
+<p align="center">
+  <a href="https://npmjs.com/package/humanize-units"><img src="https://img.shields.io/npm/v/humanize-units.svg" alt="npm package"></a>
+  <a href="https://www.npmtrends.com/humanize-units"><img src="https://img.shields.io/npm/dw/humanize-units.svg" alt="npm downloads"></a>
+  <a href="https://codecov.io/gh/bhouston/humanize-units"><img src="https://codecov.io/gh/bhouston/humanize-units/branch/main/graph/badge.svg" alt="coverage"></a>
+  <a href="https://discord.gg/fwupDN493R"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat&logo=discord" alt="discord chat"></a>
+</p>
+<br/>
+
 # Humanize Units
 
-[![NPM Package][npm]][npm-url]
-[![NPM Downloads][npm-downloads]][npmtrends-url]
-[![Tests](https://github.com/bhouston/humanize-units/actions/workflows/ci.yml/badge.svg)](https://github.com/bhouston/humanize-units/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/bhouston/humanize-units/branch/main/graph/badge.svg)](https://codecov.io/gh/bhouston/humanize-units)
-[![Discord](https://img.shields.io/badge/Discord-Join%20Chat-5865F2?logo=discord&logoColor=white)][discord-url]
+> Turn raw numbers into readable strings like 42.5k, 8.39MB, and 1d.
+
+- 📏 Over 50 Ready-Made Helpers
+- 🛠️ Custom Unit Tables
+- 🌍 Locale-Aware Number Formatting
+- 🌳 Tree-Shakeable ESM Package
+- 📦 Zero Runtime Dependencies
+- 🔷 Fully Typed TypeScript API
 
 Lightweight TypeScript helpers for turning raw numeric values into human-friendly strings with unit suffixes. Optimized for treeshaking with a base footprint of 3 KB (about 1 KB minified). Published as a modern ESM package.
+
+`humanizeUnit` picks the largest unit whose threshold fits the value, then rounds with `Intl.NumberFormat` using your significant-digit, grouping, and locale options. Helpers such as `humanizeBytes` and `humanizeTime` preconfigure it for common quantities.
 
 ## Installation
 
@@ -31,8 +44,8 @@ Every built-in unit table has a convenience helper that preconfigures `humanizeU
 ```ts
 import { humanizeBytes, humanizeTime } from 'humanize-units';
 
-humanizeBytes(1_500); // "1.5 kB"
-humanizeBytes(8_388_608, { useGrouping: true }); // "8.39 MB"
+humanizeBytes(1_500); // "1.5kB"
+humanizeBytes(8_388_608, { useGrouping: true }); // "8.39MB"
 
 humanizeTime(3_600); // "1h"
 humanizeTime(42, { unitSeparator: ' ' }); // "42 s"
@@ -97,63 +110,69 @@ const distanceUnits = [
   { value: 1_000, unit: 'km' },
   { value: 1, unit: 'm' },
 ];
-humanizeUnit(1_500, { units: distanceUnits, significantDigits: 4 }); // "1.500km"
+humanizeUnit(1_500, { units: distanceUnits, significantDigits: 4 }); // "1.5km"
 ```
 
 ## Built-in Units & Helpers
 
-| Unit table                | Description                     | Helper                            |
-| ------------------------- | ------------------------------- | --------------------------------- |
-| `SI`                      | SI prefixes (k, M, G, …)        | `humanizeCount`                   |
-| `Binary`                  | Binary prefixes (Ki, Mi, Gi, …) | -                                 |
-| `Time`                    | Time units (s, m, h, d, …)      | `humanizeTime`                    |
-| -                         | Decimal byte sizes (kB, MB, …)  | `humanizeBytes`                   |
-| -                         | Binary byte sizes (KiB, MiB, …) | `humanizeBytesBinary`             |
-| `Storage`                 | Decimal storage sizes           | `humanizeStorage`                 |
-| `StorageBinary`           | Binary storage sizes            | `humanizeStorageBinary`           |
-| `Time`                    | Seconds to years                | `humanizeTime`                    |
-| `Distance`                | SI distances (μm to Mm)         | `humanizeDistance`                |
-| `Mass`                    | SI masses (mg to Mg)            | `humanizeMass`                    |
-| `Acceleration`            | SI accelerations                | `humanizeAcceleration`            |
-| `Charge`                  | SI electric charge              | `humanizeCharge`                  |
-| `Momentum`                | SI momentum                     | `humanizeMomentum`                |
-| `Power`                   | SI power (W)                    | `humanizePower`                   |
-| `Velocity`                | SI velocity (m/s)               | `humanizeVelocity`                |
-| `Volume`                  | SI volume (m³)                  | `humanizeVolume`                  |
-| `LiquidVolume`            | SI liquid volume (L)            | `humanizeLiquidVolume`            |
-| `Temperature`             | Celsius with SI prefixes        | `humanizeTemperature`             |
-| `TemperatureKelvin`       | Kelvin with SI prefixes         | `humanizeTemperatureKelvin`       |
-| `Pressure`                | SI pressure (Pa)                | `humanizePressure`                |
-| `Force`                   | SI force (N)                    | `humanizeForce`                   |
-| `Torque`                  | SI torque (N·m)                 | `humanizeTorque`                  |
-| `Energy`                  | SI energy (J)                   | `humanizeEnergy`                  |
-| `Voltage`                 | SI voltage (V)                  | `humanizeVoltage`                 |
-| `Current`                 | SI current (A)                  | `humanizeCurrent`                 |
-| `Resistance`              | SI resistance (Ω)               | `humanizeResistance`              |
-| `Capacitance`             | SI capacitance (F)              | `humanizeCapacitance`             |
-| `Inductance`              | SI inductance (H)               | `humanizeInductance`              |
-| `Frequency`               | SI frequency (Hz)               | `humanizeFrequency`               |
-| `Angle`                   | SI angle (degrees)              | `humanizeAngle`                   |
-| `Length`                  | SI length (m)                   | `humanizeLength`                  |
-| `Area`                    | SI area (m²)                    | `humanizeArea`                    |
-| `VolumeFlowRate`          | SI volumetric flow (m³/s)       | `humanizeVolumeFlowRate`          |
-| `MassFlowRate`            | SI mass flow (kg/s)             | `humanizeMassFlowRate`            |
-| `Density`                 | SI density (kg/m³)              | `humanizeDensity`                 |
-| `Concentration`           | SI concentration (mol/m³)       | `humanizeConcentration`           |
-| `MolarMass`               | SI molar mass (g/mol)           | `humanizeMolarMass`               |
-| `MolarVolume`             | SI molar volume (m³/mol)        | `humanizeMolarVolume`             |
-| `MolarDensity`            | SI molar density (mol/m³)       | `humanizeMolarDensity`            |
-| `MolarConcentration`      | Alias of `Concentration`        | `humanizeMolarConcentration`      |
-| `MagneticFlux`            | Magnetic flux (weber)           | `humanizeMagneticFlux`            |
-| `MagneticFluxDensity`     | Magnetic flux density (tesla)   | `humanizeMagneticFluxDensity`     |
-| `Illuminance`             | Illuminance (lux)               | `humanizeIlluminance`             |
-| `LuminousFlux`            | Luminous flux (lumen)           | `humanizeLuminousFlux`            |
-| -                         | Luminous intensity (candela)    | `humanizeLuminousIntensity`       |
-| -                         | Luminous efficacy (lumen/watt)  | `humanizeLuminousEfficacy`        |
-| `Radioactivity`           | Radioactivity (becquerel)       | `humanizeRadioactivity`           |
-| `RadiationDoseEquivalent` | Equivalent dose (sievert)       | `humanizeRadiationDoseEquivalent` |
-| `RadiationDoseAbsorbed`   | Absorbed dose (gray)            | `humanizeRadiationDoseAbsorbed`   |
-| `CatalyticActivity`       | Catalytic activity (katal)      | `humanizeCatalyticActivity`       |
+Three unit tables are exported: `SI` (k, M, G, ...), `Binary` (Ki, Mi, Gi, ...), and `Time` (s, m, h, d, ...). Every helper below is `humanizeUnit` preconfigured with one of them plus a postfix, and accepts the same options except `units` and `postfix`.
+
+| Helper                            | Prefix table | Postfix   |
+| --------------------------------- | ------------ | --------- |
+| `humanizeCount`                   | `SI`         | -         |
+| `humanizeBytes`                   | `SI`         | `B`       |
+| `humanizeBytesDecimal`            | `SI`         | `B`       |
+| `humanizeBytesBinary`             | `Binary`     | `B`       |
+| `humanizeByteRate`                | `SI`         | `Bps`     |
+| `humanizeBits`                    | `SI`         | `b`       |
+| `humanizeBitsDecimal`             | `SI`         | `b`       |
+| `humanizeBitsBinary`              | `Binary`     | `b`       |
+| `humanizeBitRate`                 | `SI`         | `bps`     |
+| `humanizeStorage`                 | `SI`         | `B`       |
+| `humanizeStorageBinary`           | `Binary`     | `B`       |
+| `humanizeTime`                    | `Time`       | -         |
+| `humanizeDistance`                | `SI`         | `m`       |
+| `humanizeMass`                    | `SI`         | `g`       |
+| `humanizeAcceleration`            | `SI`         | `m/s^2`   |
+| `humanizeCharge`                  | `SI`         | `C`       |
+| `humanizeMomentum`                | `SI`         | `N*s`     |
+| `humanizePower`                   | `SI`         | `W`       |
+| `humanizeVelocity`                | `SI`         | `m/s`     |
+| `humanizeVolume`                  | `SI`         | `m^3`     |
+| `humanizeLiquidVolume`            | `SI`         | `L`       |
+| `humanizeTemperature`             | `SI`         | `°C`      |
+| `humanizeTemperatureKelvin`       | `SI`         | `°K`      |
+| `humanizePressure`                | `SI`         | `Pa`      |
+| `humanizeForce`                   | `SI`         | `N`       |
+| `humanizeTorque`                  | `SI`         | `N*m`     |
+| `humanizeEnergy`                  | `SI`         | `J`       |
+| `humanizeVoltage`                 | `SI`         | `V`       |
+| `humanizeCurrent`                 | `SI`         | `A`       |
+| `humanizeResistance`              | `SI`         | `Ω`       |
+| `humanizeCapacitance`             | `SI`         | `F`       |
+| `humanizeInductance`              | `SI`         | `H`       |
+| `humanizeFrequency`               | `SI`         | `Hz`      |
+| `humanizeAngle`                   | `SI`         | `°`       |
+| `humanizeLength`                  | `SI`         | `m`       |
+| `humanizeArea`                    | `SI`         | `m^2`     |
+| `humanizeVolumeFlowRate`          | `SI`         | `m^3/s`   |
+| `humanizeMassFlowRate`            | `SI`         | `kg/s`    |
+| `humanizeDensity`                 | `SI`         | `kg/m^3`  |
+| `humanizeConcentration`           | `SI`         | `mol/m^3` |
+| `humanizeMolarMass`               | `SI`         | `g/mol`   |
+| `humanizeMolarVolume`             | `SI`         | `m^3/mol` |
+| `humanizeMolarDensity`            | `SI`         | `mol/m^3` |
+| `humanizeMolarConcentration`      | `SI`         | `mol/m^3` |
+| `humanizeMagneticFlux`            | `SI`         | `Wb`      |
+| `humanizeMagneticFluxDensity`     | `SI`         | `T`       |
+| `humanizeIlluminance`             | `SI`         | `lx`      |
+| `humanizeLuminousFlux`            | `SI`         | `lm`      |
+| `humanizeLuminousIntensity`       | `SI`         | `cd`      |
+| `humanizeLuminousEfficacy`        | `SI`         | `lm/W`    |
+| `humanizeRadioactivity`           | `SI`         | `Bq`      |
+| `humanizeRadiationDoseEquivalent` | `SI`         | `Sv`      |
+| `humanizeRadiationDoseAbsorbed`   | `SI`         | `Gy`      |
+| `humanizeCatalyticActivity`       | `SI`         | `kat`     |
 
 ## Development
 
@@ -169,20 +188,20 @@ pnpm test # vitest
 
 Built artifacts land in `dist/`.
 
-CI also runs `pnpm check`, which enforces 100% statement/branch/function/line coverage, a 2 kB
-compressed bundle limit (size-limit), and a dependency audit at `high`/`critical` severity. See
-[RELEASING.md](RELEASING.md) for details and how to change these thresholds.
+CI also enforces 100% statement/branch/function/line coverage, a 2 kB compressed bundle limit (size-limit), and an advisory dependency audit. See [RELEASING.md](RELEASING.md#thresholds) for the thresholds and how to change them.
+
+## Releases
+
+See [RELEASING.md](RELEASING.md) for how releases are published and [GitHub Releases](https://github.com/bhouston/humanize-units/releases) for changes. See [SECURITY.md](SECURITY.md) to report vulnerabilities.
+
+## Contribution
+
+See [Contributing Guide](CONTRIBUTING.md).
+
+## License
+
+MIT
 
 ## Author
 
-[Ben Houston](https://ben3d.ca), Sponsored by [Land of Assets](https://landofassets.com)
-
-[npm]: https://img.shields.io/npm/v/humanize-units
-[npm-url]: https://www.npmjs.com/package/humanize-units
-[npm-downloads]: https://img.shields.io/npm/dw/humanize-units
-[npmtrends-url]: https://www.npmtrends.com/humanize-units
-[discord-url]: https://discord.gg/fwupDN493R
-
-## Contributing and releases
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the issue-first workflow and [RELEASING.md](RELEASING.md) for release setup and mechanics. Changes merge directly into `main`; a maintainer manually triggers the release workflow to publish. Generated changelogs and package archives are available in [GitHub Releases](https://github.com/bhouston/humanize-units/releases). See [SECURITY.md](SECURITY.md) to report vulnerabilities.
+[Ben Houston](https://ben3d.ca), Sponsored by [Land of Assets](https://landofassets.com).
