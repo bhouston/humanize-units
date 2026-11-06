@@ -1,45 +1,58 @@
-# Releases
+# Releasing
 
-## Running a release
+Releases are manual and maintainer-only. Merging to `main` never publishes.
 
-Releases are never triggered by pushes or merges to `main`. When ready to publish, the maintainer dispatches the workflow:
+## Running a Release
 
 ```sh
-gh workflow run release.yml --ref main
+gh workflow run release.yml --ref main                  # release
+gh workflow run release.yml --ref main -f dry_run=true  # preview only, publishes nothing
 ```
 
-Add `-f dry_run=true` to preview versioning, the changelog, and the release without publishing or tagging. The workflow only accepts manual dispatch on `main`; it repeats the quality checks, then publishes through npm trusted publishing if releasable commits exist since the last release. A dry run needs GitHub authentication and must run on `main` to produce a meaningful preview; on a feature branch it will skip releasing.
+When there are no release-worthy commits since the last `v*` tag, the run is a no-op.
 
-## One-time activation
+## What the Workflow Does
 
-The workflow is installed in `.github/workflows/release.yml`.
+1. Refuses any ref other than `main`.
+2. Runs the full CI workflow on the dispatched commit.
+3. Stops if `main` has moved since the dispatch.
+4. Installs, builds, and runs `pnpm release`, which is semantic-release.
+5. semantic-release computes the next version, creates the `v<version>` tag and GitHub Release, and publishes.
 
-1. On npmjs.com, open **humanize-units → Settings → Trusted publishing**, choose GitHub Actions, and enter:
+Releases run one at a time and never cancel a publish in progress. npm packages publish through npm trusted publishing (GitHub OIDC), so no `NPM_TOKEN` is stored.
 
-   | Field                | Value                                             |
-   | -------------------- | ------------------------------------------------- |
-   | Organization or user | `bhouston`                                        |
-   | Repository           | `humanize-units`                                  |
-   | Workflow filename    | `release.yml`                                     |
-   | Environment          | Leave blank (the job does not use an environment) |
+## Versioning
 
-   This is a package setting, not a repository secret. Publishing uses GitHub-hosted runners with `id-token: write`, the pinned pnpm CLI (via `@anolilab/semantic-release-pnpm`, which runs `pnpm publish` under the hood), and no `NPM_TOKEN` or `NODE_AUTH_TOKEN`. Do not add `registry-url` to setup-node. See the [npm trusted publishing documentation](https://docs.npmjs.com/trusted-publishers/) and [Semantic Release GitHub Actions guide](https://semantic-release.org/recipes/ci-configurations/github-actions/).
+The version comes from the Conventional Commits since the last `v*` tag. The highest change wins:
 
-2. The existing npm release `2.0.4` records git commit `e34af8c44669600a5c33a9fdcaf0c6a4b4c1830b`; the `v2.0.4` tag is pinned at that exact commit. The release workflow verifies a `v<version>` tag matching the current `package.json` version exists before publishing (dynamically, not a hardcoded version), to catch this class of missing-tag problem again. Never move existing release tags.
-3. Enable branch protection/rulesets for `main`: require PRs, require the `ci` check, and block direct pushes, force pushes, and deletion. The release workflow only runs on manual dispatch, so its status never gates ordinary PRs. Enable merge commits only; disable squash and rebase merging.
-4. Configure the npm trusted publisher before dispatching the release workflow.
-5. Configure the repository `CODECOV_TOKEN` secret from Codecov for reliable coverage publishing; coverage thresholds themselves do not depend on Codecov.
+- `feat` produces a minor release.
+- `fix` and `perf` produce a patch release.
+- `!` or a `BREAKING CHANGE:` footer produces a major release.
+- Other types do not trigger a release.
 
-## Versioning and artifacts
+Everything this repository publishes shares one version. `package.json` versions in source are development snapshots; the Git tag and the registry hold the released version. [GitHub Releases](https://github.com/bhouston/humanize-units/releases) is the changelog of record.
 
-Semantic Release determines the version from tags and Conventional Commits since the last release, updates the package version in the publish workspace, generates a per-release `CHANGELOG.md`, and publishes to npm with provenance via `pnpm publish` (through `@anolilab/semantic-release-pnpm`) plus a GitHub Release containing release notes, the changelog, and the package archive. GitHub Releases are the cumulative changelog. The repository's `package.json` version stays at the bootstrap value; it is not the published version source of truth. Release automation does not push version/changelog commits to protected branches.
+## One-Time Setup
 
-## Development thresholds
+1. On npmjs.com, open each package's Trusted Publisher settings, choose GitHub Actions, and enter organization or user `bhouston`, repository `humanize-units`, workflow filename `release.yml`, and environment name `npm`.
+2. Protect `main`: require pull requests and the CI checks, allow merge commits, and block force pushes and deletion.
+3. If the repository uploads coverage to Codecov, add the `CODECOV_TOKEN` repository secret.
 
-`pnpm check` (also run in CI) enforces:
+## Recovery
 
-- **100%** statements, branches, functions, and lines coverage.
-- A **2 kB** compressed bundle limit via size-limit (`pnpm size`).
-- A dependency audit at `high`/`critical` severity (`pnpm audit --audit-level=high`); lower-severity findings remain visible but non-blocking.
+Publishing is not atomic. If a run fails part way, compare the registry versions, the `v<version>` tag, and the workflow log, then finish what is missing from the same release commit. If publishing succeeded but the GitHub Release failed, create the release from the existing tag. Never republish a version, delete a published version, or move a release tag. Resolve the failure before dispatching another release.
 
-Change any of these thresholds only with a justified explanation in the PR.
+## Repository Specifics
+
+### Published Artifacts
+
+- `humanize-units` on npm.
+- The GitHub Release also carries the `pnpm pack` tarball as an asset, created by `scripts/pack-release.mjs`.
+
+### Required Checks
+
+The `main` protection requires the `ci` and `contribution` checks.
+
+### Thresholds
+
+`pnpm test --coverage` enforces 100% statements, branches, functions, and lines. `pnpm size` enforces a 2 kB limit on `dist/index.js`. `pnpm audit --audit-level=high` is advisory in CI: it warns but does not fail the run. Explain any intentional threshold change in the PR.
