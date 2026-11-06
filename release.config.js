@@ -4,7 +4,8 @@ export default {
   plugins: [
     ['@semantic-release/commit-analyzer', { preset: 'conventionalcommits' }],
     ['@semantic-release/release-notes-generator', { preset: 'conventionalcommits' }],
-    ['@anolilab/semantic-release-pnpm', { tarballDir: 'release' }],
+    '@anolilab/semantic-release-pnpm',
+    './scripts/pack-release.mjs',
     [
       '@semantic-release/github',
       {
