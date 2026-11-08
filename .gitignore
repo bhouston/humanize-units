@@ -10,3 +10,4 @@ release
 # Agent tooling
 .claude/
 .codex/
+.cursor/
