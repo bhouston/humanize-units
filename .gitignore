@@ -6,3 +6,7 @@ coverage
 publish
 release
 .size-limit
+
+# Agent tooling
+.claude/
+.codex/
